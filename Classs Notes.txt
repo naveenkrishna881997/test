@@ -1,0 +1,4012 @@
+3 Steps in Java Build process:
+  # Compile
+  # Unit Test
+  # Package
+
+Java Build
+========
+$ sudo apt update
+$ sudo apt install -y git
+$ sudo apt install -y openjdk-17-jdk
+$ sudo apt install -y maven
+$ java --version
+$ mvn --version
+
+$ git clone https://gitlab.com/scmlearningcentre/mavenbuild.git demobuild 
+$ git checkout springboot
+$ mvn clean package -Dmaven.test.skip=true
+
+Node Build
+=========
+Build Steps:
+ - there is no compilation
+ - unit test using a framework
+ - create a tar/zip with all the necessary *.js/*.html
+
+3 Steps in Node/JS Build process:
+  # Install
+  # Unit Test
+  # Package
+
+$ sudo apt install -y nodejs
+$ sudo apt install -y npm
+$ node -v
+
+# Build & Unit test:
+$ git clone https://gitlab.com/scmlearningcentre/nodebuild.git nodebuild
+$ npm install            ( download developer modules like unit test, security i.e codecoverage/lint)
+$ npm test
+$ tar -cvf samplenode.tar app.js *html
+
+Java Deployment
+==============
+$ sudo apt install -y docker.io
+$ sudo usermod -a -G docker ubuntu
+$ docker run --name mydb -p 3306:3306 -e MYSQL_USER=wezvatech -e MYSQL_PASSWORD=password -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=mywezvadb -d mysql:8.1
+$ docker exec -it mydb mysql -uroot -ppassword
+  mysql> show databases;
+  mysql> use mywezvadb;
+  mysql> show tables;
+  mysql> select * from book;
+
+Log Levels:  INFO, WARN, ERROR, DEBUG, TRACE
+--------------
+DB|UserDB|PasswordDB|Log-Level|Log-file|Certificates|Heap-Memory
+Log Files: server.log / access.log / users.log
+
+$ nohup java -jar target/wezvatech-springboot-mysql-9739110917.jar  2>&1 &
+   # Adding min & max heap memory: -Xms512m -Xmx512m
+   # Adding log level:  -Dlogging.level.org.springframework=INFO 
+   # Adding log file:  --logging.file.name=/home/ubuntu/server.log
+
+$ netstat -an |grep 8080
+$ ps aux | grep java
+$ curl -s http://localhost:8080/books
+
+# Add a entry to test the application
+$ curl -X POST -H "Content-Type: application/json" -d '{"title":"Book A", "price":49.99, "publishDate":"2024-04-12"}' "http://localhost:8080/books"
+
+# Clean the steps
+$ ps aux |grep   - find the process id
+$ kill -9 <pid>
+$ docker stop mydb
+$ docker rm mydb
+
+Node Deploy (Node doesnt have any log levels)
+==========
+$ tar -xvf samplenode.tar
+$ npm ci --only=production         (download only modules for running the application)
+$ nohup npm start > server.log 2>&1 &
+$ netstat -an |grep 8000
+
+===
+GIT
+===
+https://gitlab.com/scmlearningcentre/awesomesep24.git
+
+$ git config --global user.name "ADAM M"
+$ git config --global user.email "scmlearningcentre@gmail.com"
+$ git config --global push.default "simple"
+
+$ git clone <remote> <local>
+   git clone https://gitlab.com/scmlearningcentre/awesomesep24.git user1
+$ git status
+$ git add <filename> or git add .
+$ git commit -m "message"
+$ git log -1 --oneline
+$ git push
+$ git pull
+
+$ git branch -a
+$ git checkout <branch>
+$ git branch <name>
+$ git merge <source> <dest>
+$ git cherry-pick <commit-id>
+
+$ git tag
+$ git tag -a "tagname" -m "comment" <commit-id>
+
+======
+Docker
+======
+* Container Management
+* Image Management
+
+$ sudo apt update
+$ sudo apt install -y docker.io
+$ systemctl status docker | systemctl start docker
+$ docker info
+$ sudo usermod -a -G docker ubuntu
+
+$ docker run --name <Cname> -it|-d -p <HP>:<CP> -v <HD>:<CD> <Image> <StartupCMD>
+ - Download the Image from registry ( Default registry is Dockerhub )   (  docker pull )
+ - create a new container, unique ID                                                        ( docker create )
+ - Start the container, execute the startup cmd                                         ( docker start )
+ - attach to the container interactively                                                        ( docker attach )
+
+$ docker images
+$ docker ps -a
+$ docker logs -f <CID|Cname> # helps you to see the console output of a container
+$ docker exec <CID|Cname> <cmd> # helps to run a command inside a container without attaching to it
+$ docker start <CID|Cname>
+$ docker stop <CID|Cname>
+$ docker rm <CID|Cname>
+$ docker rmi <Image>
+$ docker attach <CID|Cname>
+
+$ docker run --name test00 -it centos
+$ docker run --name test01 -it centos /bin/sh
+$ docker run --name test02 -it centos echo "HI-ADAM"
+$ docker run -d --name testd centos /bin/sh -c "while true; do echo hello Adam; sleep 8; done"
+$ docker run --rm -d --name testd centos /bin/sh -c "while true; do echo hello Adam; sleep 8; done"
+$ docker logs -f testd
+$ docker exec testd ps -ef
+$ docker exec -it testd /bin/bash
+
+$ docker run --rm --name myapache -p 80:80 -d httpd
+$ docker run --rm --name mynginx -p 8081:80 -d nginx
+$ docker run --name c1 -it -v /tmp/host:/tmp/cont centos /bin/bash
+
+============
+TERRAFORM
+============
+- Prone to errors
+- not scalable
+- not optimized way of using
+- immutable infra
+- not cloud agnostic
+
+IAC:
+ * desired state as a file/code
+ * version the code/file
+ * review & reuse the code/file
+
+$ sudo hostnamectl set-hostname <machinename>
+
+Install through Package:
+ $ curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+ $ sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+ $ sudo apt-get update && sudo apt-get install terraform
+ $ sudo ln -s /usr/bin/terraform /usr/local/bin/terraform
+
+Install specific version:
+ $ curl -O https://releases.hashicorp.com/terraform/0.15.2/terraform_0.15.2_linux_amd64.zip https://releases.hashicorp.com/terraform/
+ $ sudo apt install -y unzip
+ $ sudo unzip terraform_0.15.2_linux_amd64.zip -d /usr/local/bin/
+
+ACCESS KEY: AKIAWLQIL5DFB2RO6JM2
+SECRET KEY: ZTkoA+KhpCdiX0PJOwtkQEi59B45Rdk
+
+------------------TERRAFORM AWS SETUP----------
+1. Passing access/secret key as environment variables
+$ export AWS_ACCESS_KEY_ID=(your access key id)
+$ export AWS_SECRET_ACCESS_KEY=(your secret access key)
+
+2. Passing access/secret key through a credentials file
+Install AWS Cli:
+ $ curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+ $ sudo apt install unzip && unzip awscliv2.zip
+ $ sudo ./aws/install --bin-dir /usr/bin --install-dir /usr/bin/aws-cli --update
+ $ aws --version
+
+Configure AWS Cli with Access/Secret Key
+ $ aws configure
+   - creates ~/.aws/credentials file
+
+[default]
+aws_access_key_id = AKIAWLQIL5DFB2RO6JM2
+aws_secret_access_key = ZTkoA+KhpCdiX0PJOwtkQEi59B45Rdk
+
+HCL
+===
+ - HCL(Hashicorp Language)/ *.tf
+ - blocks { }
+ - every block will have a type & a name
+ - every statement should be in a key = value format
+
+   provider block
+   ------------------
+   Syntax:
+   provider "providername" {
+     key = value
+   }
+
+   resource block
+   -------------------
+   Syntax:
+   resource "provider_resourcetype" "name" {
+      key = value
+   }
+
+Create Infrastructure
+--------------------------
+$ mkdir -p terraform/basics
+$ cd terraform/basics
+$ vi main.tf
+
+# Specify the AWS details
+provider "aws" {
+  region = "ap-south-1"
+}
+
+# Specify the EC2 details
+resource "aws_instance" "example" {
+  ami           = "ami-0ad21ae1d0696ad58"
+  instance_type = "t2.micro"
+}
+
+Terraform Workflow
+--------------------------
+$ terraform init
+$ terraform validate
+$ terraform fmt
+$ terraform plan [-out planfile] [-destroy] [-target <resource>]
+  + indicates resource creation
+  - indicates resource deletion
+  -/+ indicates resource recreation
+  ~ indicates resource modification
+$ terraform apply [planfile] -auto-approve
+$ terraform show
+$ terraform destroy
+
+Modify Infrastructure
+--------------------------
+# Specify the AWS details
+provider "aws" {
+  region = "ap-south-1"
+}
+
+# Specify the EC2 details
+resource "aws_instance" "example" {
+  ami           = "ami-0ad21ae1d0696ad58"
+  instance_type = "t2.micro"
+}
+
+# Create S3 bucket
+resource "aws_s3_bucket" "example" {
+  # NOTE: S3 bucket names must be unique across _all_ AWS accounts
+  bucket = "wezvatech-adam-demo-s3-sep2024"
+}
+
+$ terraform plan -out creationplan
+$ terraform apply creationplan
+$ terraform plan -destroy -target aws_s3_bucket.example -out destroyplan
+$ terraform apply destroyplan
+
+INTERPOLATION: RESOURCETYPE.RESOURCENAME.ATTRIBUTES
+
+Implicit Dependency
+=============== 
+
+# Specify the AWS details
+provider "aws" {
+  region = "ap-south-1"
+}
+
+resource "aws_eip" "ip" {
+  instance = aws_instance.example.id
+}
+
+resource "aws_instance" "example" {
+  ami           = "ami-0ad21ae1d0696ad58"
+  instance_type = "t2.micro"
+}
+
+Explicit Dependency
+===============
+provider "aws" {
+  region = "ap-south-1"
+}
+
+resource "aws_instance" "example" {
+  ami           = "ami-0ad21ae1d0696ad58"
+  instance_type = "t2.micro"
+  depends_on = [aws_s3_bucket.example]
+}
+
+# Create S3 bucket
+resource "aws_s3_bucket" "example" {
+  bucket = "wezvatech-adam-demo-s3-sepoct2024"
+}
+
+
+$ terraform plan -destroy -target aws_instance.example
+- deletes both the parent & the dependent child resources if we delete parent
+- deletes only child if we delete child resource
+
+TFSTATE File
+============
+* By default Terraform will create a local state file in the same workspace
+* This is what acts as the actual state, whereas the *.tf files gives the desired state
+
+$ vi backend.tf
+terraform{
+  backend "s3" {
+     bucket = "wezvatech-adam-demo-s3-remotestate"
+     key = "basics/terraform.tfstate" # path & file which will hold the state #
+     region = "ap-south-1"
+     dynamodb_table = "terraform-state-lock-dynamo" # dynamoDB to store state lock #
+     encrypt        = "true"
+  }
+}
+
+-------project to create s3/dynamodb for remote state lock------
+provider "aws" {
+  region = "ap-south-1"
+}
+
+# Create S3 bucket to store remote state file #
+resource "aws_s3_bucket" "example" {
+  bucket = "wezvatech-adam-demo-s3-remotestate"
+}
+
+# Create a dynamodb table for locking the state file #
+resource "aws_dynamodb_table" "dynamodb-terraform-state-lock" {
+  name           = "terraform-state-lock-dynamo"
+  hash_key       = "LockID"
+  read_capacity  = 20
+  write_capacity = 20
+  attribute {
+    name = "LockID"
+    type = "S"
+  }
+  tags = {
+    Name = "DynamoDB Terraform State Lock Table"
+  }
+}
+
+DataSource
+==========
+* This block is used to only read data from a provider
+* data block will return error if the data is not there
+
+Interpolation: DATA.DATASOURCETYPE.NAME.ATTRIBUTES
+
+Syntax:
+data "provider_datatype" "name" {
+   key = value
+}
+
+provider "aws" {
+  region = "ap-south-1"
+}
+
+data "aws_availability_zones" "example" {
+    state = "available"
+}
+
+data "aws_instances" "test" {
+  filter {
+    name = "instance-type"
+    values = ["t2.micro","t2.small"]
+  }
+
+  instance_state_names = ["running", "stopped"]
+}
+
+Import
+======
+* Importing details of resources which are managed outside the terraform
+* First add respective resource blocks to your desired state
+* Import the existing details into the state file
+
+provider "aws" {
+  region = "ap-south-1"
+}
+
+# Specify the EC2 details
+resource "aws_instance" "example1" {
+  ami           = "ami-0522ab6e1ddcc7055"
+  instance_type = "t2.micro"
+}
+
+resource "aws_instance" "example2" {
+  ami           = "ami-0522ab6e1ddcc7055"
+  instance_type = "t2.micro"
+}
+
+$ terraform import aws_instance.example2 i-04828223b3509f4aa
+
+VARIABLES
+=========
+* Input Variables, Output Variables, Local Values
+* Input variables type:
+ - string (default) - var.variablename ex: var.amiid 
+ - numeric          
+ - list/array       - var.variablename[indexnumber] ex: var.amiid[0]
+ - map/hash         - var.variablename[keyname] ex: var.image_name["centos"]
+
+Syntax:
+----------
+variable "name" {
+   default = "defaultvalue"
+   type = 
+}
+
+String variables:
+----------------
+provider "aws" {
+  region = "ap-south-1"
+}
+
+variable "amiid" {
+  default = "ami-0ad21ae1d0696ad58"
+}
+
+variable "type" {
+  default = "t2.micro"
+}
+
+resource "aws_instance" "example1" {
+  ami           = var.amiid
+  instance_type = var.type
+}
+
+resource "aws_instance" "example2" {
+  ami           = var.amiid
+  instance_type = var.type
+}
+
+
+$ terraform plan -var "amiid=ami-0c6615d1e95c98aca" -var "type=t2.medium" -out testplan
+$ terraform apply testplan
+
+$ terraform plan -var "amiid=ami-0c6615d1e95c98aca"  -var "type=t2.medium" -out destroyplan -destroy
+$ terraform apply destroyplan
+
+-- passing values from cmd line --
+$ terraform plan -var "amiid=ami-0c6615d1e95c98aca" -var "type=t2.medium" -out testplan
+$ terraform apply testplan
+
+$ terraform plan -var "amiid=ami-0c6615d1e95c98aca"  -var "type=t2.medium" -out destroyplan -destroy
+$ terraform apply destroyplan
+
+ -- passing values through a file to variables --
+- vi vars.tfvars
+   amiid = "ami-0c6615d1e95c98aca"
+   type = "t2.medium"
+
+$ terraform plan -var-file=vars.tfvars -out testplan3
+$ terraform apply testplan3
+
+$ terraform plan -var-file=vars.tfvars -out testplan4 -destroy
+$ terraform apply testplan4
+
+List variables:
+------------------
+provider "aws" {
+  region = "ap-south-1"
+}
+
+variable "amiid" {
+    type    = list
+    default = ["ami-0c6615d1e95c98aca", "ami-0c1a7f89451184c8b"]
+                        # Index-0                                Index-1
+}    
+
+variable "indexno" {
+  default = 0
+}             
+
+resource "aws_instance" "example" {
+  ami           = var.amiid[var.indexno]
+  instance_type = "t2.micro"
+}
+
+$ terraform plan -var "indexno=1" -out testplan
+$ terraform apply testplan
+
+$ terraform plan -var "indexno=1" -out testplan2 -destroy
+$ terraform apply testplan2
+
+MAP variables:
+-------------------
+provider "aws" {
+  region = "ap-south-1"
+}
+
+variable "amiid" {
+    type    = map
+    default = {
+       "centos" = "ami-0c6615d1e95c98aca"
+       "ubuntu" = "ami-0c1a7f89451184c8b"
+    }
+}
+
+variable "key" {
+  default = "ubuntu"
+}
+
+resource "aws_instance" "example" {
+  ami           = var.amiid[var.key]
+  instance_type = "t2.micro"
+}
+
+$ terraform plan -var "key=centos" -out testplan
+$ terraform apply  testplan
+
+$ terraform plan -var "key=centos" -out testplan2 -destroy
+$ terraform apply testplan2
+
+OUTPUT variables
+==============
+
+provider "aws" {
+  region = "ap-south-1"
+}
+
+data "aws_availability_zones" "example" {
+    state = "available"
+}
+
+output "azlist" {
+    value = data.aws_availability_zones.example.names[0]
+}
+
+LOCAL values
+===========
+* Local values are scoped to be within a module and we cannot change the value
+* use this when we want to generate dynamic values
+
+Built-In functions : functionname(values)
+============
+$ terraform console
+max(1,31,12)
+upper("hello")
+split("a", "tomato")
+substr("hello world", 1, 4)
+index(["a", "b", "c"], "b")
+length("adam")
+length(["ab", "bc"])
+lookup({a="1", b="2"}, "a", "novalue")
+
+Clear Cache in Ubuntu:
+==================
+$ sync; echo 1 > /proc/sys/vm/drop_caches
+$ sync; echo 2 > /proc/sys/vm/drop_caches
+$ sync; echo 3 > /proc/sys/vm/drop_caches 
+
+
+Modules   #*-- You might have to use a larger machine like t2.small or greater for this example --*#
+=======
+* Reuse the code
+* flexibility in using the code
+
+Instance module
+-----------------------
+$ mkdir -p modules/instance
+$ vi main.tf
+provider "aws" {
+  region = "ap-south-1"
+}
+
+resource "aws_instance" "example" {
+  ami           = var.amiid
+  instance_type = var.type
+}
+
+$ vi variables.tf
+variable "amiid" {
+  default = "ami-0f58b397bc5c1f2e8"
+}
+
+variable "type" {
+  default = "t2.micro"
+}
+
+$ vi output.tf
+output "instanceid" {
+  value = aws_instance.example.id
+}
+
+EIP module
+----------------
+$ mkdir -p modules/eip
+$ vi main.tf
+provider "aws" {
+  region = "ap-south-1"
+}
+
+resource "aws_eip" "ip" {
+  instance = var.instanceid
+}
+
+$ vi variables.tf
+
+variable "instanceid" {
+}
+
+---Root Module---
+$ cd rootmod
+$ vi main.tf
+module "instance" {
+  source = "../modules/instance"
+  amiid = var.instance_amiid
+  type = var.instance_type
+}
+
+module "eip" {
+   source = "../modules/eip"
+   instanceid = module.instance.instanceid
+}
+
+$ vi variables.tf
+variable "instance_amiid" {
+  default = "ami-006d3995d3a6b963b"
+}
+
+variable "instance_type" {
+  default = "t2.micro"
+}
+
+Loops
+=====
+provider "aws" {
+  region = "ap-south-1"
+}
+
+resource "aws_iam_user" "example" {
+  name = "adam"
+}
+
+======Count keyword=====
+provider "aws" {
+  region = "ap-south-1"
+}
+
+variable "user_names" {
+  description = "Create IAM users with these names"
+  type        = list(string)
+  default     = ["raghu","ranjit","bala","charly","kiran"]
+}
+
+resource "aws_iam_user" "example" {
+  count = length(var.user_names)
+  name  = var.user_names[count.index] 
+}
+
+=========for_each keyword=====
+* for_each runs the resource block as a Map
+* provider_resourcetype.resourcename["each.value"]
+
+variable "user_names" {
+  description = "Create IAM users with these names"
+  type        = list(string)
+  default     = ["kumar","gaurav","sumanth","karthick"]
+}
+
+resource "aws_iam_user" "example" {
+  for_each = toset(var.user_names)
+  name     = each.value
+}
+
+==Dynamic Blocks==
+* Dynamic blocks helps to iterate a single resource multiple times against a set of values
+
+resource "aws_security_group" "sg-webserver" {
+    name                = "webserver"
+    description         = "Security Group for Web Servers"
+    ingress {
+        protocol = "tcp"
+        from_port = 80
+        to_port = 80
+        cidr_blocks = [ "0.0.0.0/0" ]
+    }
+    ingress {
+        protocol = "tcp"
+        from_port = 443
+        to_port = 443
+        cidr_blocks = [ "0.0.0.0/0" ]
+    }
+
+}
+--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- 
+# to get the value - local.variablename 
+locals {
+    inbound_ports = [80, 443]
+}
+
+# Security Groups
+resource "aws_security_group" "sg-webserver" {
+    name                = "webserver"
+    description         = "Security Group for Web Servers"
+
+    dynamic "ingress" {
+        for_each = local.inbound_ports
+        content {
+            from_port   = ingress.value
+            to_port     = ingress.value
+            protocol    = "tcp"
+            cidr_blocks = [ "0.0.0.0/0" ]
+        }
+    }
+}
+
+Conditions
+========
+* Default value for count is 1, if count is > 1 then it loops the block
+* If count is 0 then the block will be skipped
+
+provider "aws" {
+  region = "ap-south-1"
+}
+
+resource "aws_iam_user" "example" {
+  name = "adam"
+  count = 0
+}
+
+-----------Ternary operator-----------
+provider "aws" {
+  region = "ap-south-1"
+}
+
+variable "con" {
+   default = "0"
+}
+
+resource "aws_iam_user" "example2" {
+  count = var.con ? 1 : 2       # expression ? <true_value> : <false_value>
+  name  = "example2"
+}
+
+# expression 0 is false, expression 1 is true
+
+Provisioners
+==========
+# If we want to do some initial configuration the server
+# If we want to copy some files to the server
+# If we want to run some command or script inside the server
+# If we want to run some command or script on the terraform core server
+- Provisioner blocks are child blocks for resource blocks
+
+Resource:
+ * creation time provisioner (default)
+   - first resource will get created
+   - provisioner will be called
+ * destroy time provisioner
+   - provisioner will be called first
+   - resource will be destroyed at last
+
+Local-exec Provisioner
+------------------------------
+provider "aws" {
+  region = "ap-south-1"
+}
+
+# Specify the EC2 details
+resource "aws_instance" "example" {
+  ami           = "ami-0f58b397bc5c1f2e8"
+  instance_type = "t2.micro"
+ 
+  provisioner "local-exec" {
+    command = "echo ${aws_instance.example.private_ip} >> private_ips.txt"
+  }
+
+  provisioner "local-exec" {
+    command = "exit 1"
+    on_failure = continue
+  }
+
+  provisioner "local-exec" {
+    when = destroy
+    command = "rm private_ips.txt"
+  }  
+}
+
+FILE PROVISIONER
+-----------------------------
+provider "aws" {
+  region = "ap-south-1"
+}
+
+resource "aws_instance" "example" {
+  ami           = "ami-0f58b397bc5c1f2e8"
+  instance_type = "t2.micro"
+  key_name      = "mastersep24"
+
+  provisioner "file" {
+    source      = "test.conf"
+    destination = "/tmp/myapp.conf"
+  }
+
+  connection {
+    type     = "ssh"
+    user     = "ubuntu"
+    private_key = file("mastersep24.pem")
+    host     = self.public_ip
+  }
+}
+
+REMOTE-EXEC
+----------------------
+provider "aws" {
+  region = "ap-south-1"
+}
+
+resource "aws_instance" "example" {
+  ami           = "ami-0f58b397bc5c1f2e8"
+  instance_type = "t2.micro"
+  key_name      = "mastersep24"
+
+  provisioner "local-exec" {
+    command    = "echo 'while true; do echo hi-students; sleep 5; done' > myscript.sh"
+  }
+ 
+  provisioner "file" {
+    source      = "myscript.sh"
+    destination = "/tmp/myscript.sh"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "chmod +x /tmp/myscript.sh",
+      "nohup /tmp/myscript.sh 2>&1 &",
+    ]
+  }
+
+  connection {
+    type     = "ssh"
+    user     = "ubuntu"
+    private_key = file("mastersep24.pem")
+    host     = self.public_ip
+  }
+}
+
+
+NULL RESOURCE
+--------------------------
+provider "aws" {
+  region = "ap-south-1"
+}
+
+resource "null_resource" "dummy" {
+  provisioner "local-exec" {
+    command = "touch MYFILE"
+  }
+}
+
+Image Management
+---------------------------
+* Create Images frequently
+* Automate the Image creation
+* Faster way of creation
+
+Dockerfile
+========
+* Special file in which we give the instructions on how to create a Docker Image.
+ - Automates the Image creation on the background
+ - uses existing layer from cache (/var/lib/docker)
+
+INSTRUCTION  COMMAND
+===========    =========
+FROM         <BaseImage>        # image for creating the intermediate container
+RUN          <command>            # instruction to run OS cmd inside the intermediate container
+CMD          ["executable","arg1","arg2"]    # user cmd will override the default cmd
+ENTRYPOINT   ["executable","arg1","arg2"]    # always runs default cmd, user cmd is taken as arguments
+COPY         <SRC> <DEST>                    # copies file from docker host to image
+ADD          <SRC> <DEST>                    # extract a archive or download a file from a URL
+USER         <USERNAME>                      # sets the default user
+WORKDIR      <PATH>                          # sets the default working dir
+ENV          <VARNAME>=<VALUE>               # variable visible in the image
+ARG          <VARNAME>=<VALUE>               # variable only visible in temp container, not on image
+EXPOSE       <PORT#>
+
+
+Imagename = Reponame:Tagname # default tag is latest
+Image = <Registry>/<ImageName>:<TagName>
+
+$ docker build -t <ImageName>:<Tagname> . -f <Dockerfile-location> --build-arg <VARNAME>=<value>
+$ docker build -t myimg:b1 .
+
+Example:
+-----------
+FROM ubuntu
+RUN apt -y update
+RUN apt install -y openjdk-11-jdk
+RUN touch /tmp/test
+CMD ["/bin/sh"]     # CMD ["java","-jar","test.jar", "-xms=2g","-xmx=4g"]
+COPY startup.sh /tmp/startup.sh
+ENTRYPOINT ["/tmp/startup.sh"]
+
+     #!/bin/bash
+     echo "Running Startup Script .."
+     echo $0 $1 $2
+     echo "java -jar test.jar $1 $2"
+
+ADD test.tar /tmp
+USER nobody
+WORKDIR /tmp
+ENV JAVA_HOME=/opt/jdk1.8
+ARG MYNAME=ADAM
+EXPOSE 8080
+EXPOSE 7001
+
+ARG ImgTag=latest
+FROM ubuntu:$ImgTag
+ENV JAVA_HOME=/opt/jdk1.8
+ARG MYNAME=ADAM
+RUN touch /tmp/$MYNAME  
+
+$  docker build -t myimg:arg . --build-arg ImgTag=22.04 
+
+Syntax:
+$ docker login <registry>
+$ docker tag <Image>:<tag> <registry>/<repo>/<image>:<tag>
+$ docker push <registry>/<repo>/<image>:<tag>
+
+Example:
+$ docker tag myspringboot:sep24 adamtravis/wezvatechspringboot:sep24
+$ docker push adamtravis/wezvatechspringboot:sep24
+
+$ docker tag mynodejs:sep24 adamtravis/wezvatechreactjs:sep24
+$ docker push adamtravis/wezvatechreactjs:sep24
+
+Dockerization Workflow
+---------------------------------
+Build App Image -> Smoke Test -> Push to Private Docker Registry
+
+  # Make sure Database is running before starting the application container #
+$ docker run --name testspringboot --rm --net=host -d -p 8080:8080 myspringboot:sep24
+$ docker run --name testnode --rm -d -p 3000:3000 mynodejs:sep24
+
+============
+KUBERNETES
+============
+
+Control plane
+-------------
+* API server
+* ETCd
+* Controller
+* Scheduler
+* CodeDNS
+
+Data plane
+----------
+* kubelet
+* Kube-proxy
+* Docker daemon
+
+Setup Kubernetes (through Minikube, t2.medium i.e 2 CPU's)
+-------------------------
+Install Docker
+$ sudo apt update && sudo apt -y install docker.io
+
+ Install kubectl
+$ curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.23.7/bin/linux/amd64/kubectl && chmod +x ./kubectl && sudo mv ./kubectl /usr/local/bin/kubectl
+
+ Install Minikube
+$ curl -Lo minikube https://storage.googleapis.com/minikube/releases/v1.23.2/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/
+
+ Start Minikube
+$  sudo apt install conntrack
+$  minikube start --vm-driver=none
+$  minikube status
+
+KUBECTL (reads from the .kube/config file)
+--------------
+$ kubectl get nodes
+$ kubectl describe node <name>
+$ kubectl <command> <type> <nameofobject>
+$ kubectl <command> -f <manifest>.yml
+
+.YAML or .YML
+============
+---# comment
+keyname1: <value>
+keyname2: <value>
+    - keyname2.1: <value>
+      keyname2.2: <value>
+        keyname2.2.1: <value>
+    - keyname2.0.1: <value>
+      keyname2.0.2: <value>
+keyname3: <value>
+
+--- # comment goes here
+- myname: adam
+  myloc: 
+    country: India
+    city: blr
+- mycourse: devops
+  level: basic-intermediate
+  - module: config_mgmt
+    tool: ansible
+  - module: IAC
+    tool: terraform
+
+pod1.yml
+-------------
+kind: Pod                         # Object Type
+apiVersion: v1                    # API version
+metadata:                         # Set of data which describes the Object
+  name: testpod                  # Name of the Object
+spec:                             # Data which describes the state of the Object
+  containers:                     # Data which describes the Container details
+    - name: main                   # Name of the Container
+      image: ubuntu              #  Image which is used to create Container
+      command: ["/bin/bash", "-c", "while true; do echo Hello-Adam; sleep 8 ; done"]
+      env:               # List of environment variables to be used inside the pod
+      - name: ORG
+        value: WEZVATECH
+      - name: SESSION
+        value: PODS
+  restartPolicy: Never         # Defaults to Always
+
+$ kubectl apply -f pod1.yml
+$ kubectl get pods
+$ kubectl get pods -o wide
+$ kubectl delete -f pod1.yml
+$ kubectl describe pod testpod
+$ kubectl logs -f testpod
+$ kubectl exec testpod -- ps -ef
+$ kubectl exec testpod -it -- /bin/bash
+$ kubectl exec testpod -- env
+
+pod2.yml
+-------------
+kind: Pod                         
+apiVersion: v1                  
+metadata:                         
+  name: testpod                  
+spec:                             
+  containers:                     
+    - name: main                                   # Main container #
+      image: ubuntu              
+      command: ["/bin/bash", "-c", "while true; do echo Hello-Adam; sleep 8 ; done"]
+    - name: sidecar                              # Sidecar container #
+      image: httpd
+      ports:
+       - containerPort: 80 
+
+
+$ kubectl logs -f testpod2 -c main
+$ kubectl logs -f testpod2 -c sidecar
+$ kubectl exec testpod2 -c main -it -- /bin/bash
+$ curl <podIP>:80
+
+
+Pod Resources
+============
+* requests -  the min capacity needed for starting the container
+* limits - the max capacity the container can use from the worker
+
+pod3.yml
+-------------
+apiVersion: v1
+kind: Pod
+metadata:
+  name: resources
+spec:
+  containers:
+  - name: resource
+    image: centos
+    command: ["/bin/bash", "-c", "while true; do echo Hello-Adam; sleep 5 ; done"]
+    resources:                        # Describes the type of resources to be used
+      requests:
+        memory: "64Mi" # A mebibyte is 1,048,576 bytes, ex: 64Mi
+        cpu: "100m"       # CPU core split into 1000 units (milli = 1000), ex: 100m
+      limits:
+        memory: "200Mi" # ex: 128Mi
+        cpu: "200m"  # ex: 200m
+
+pod4.yml
+-------------
+kind: Pod
+apiVersion: v1
+metadata:
+  name: labelspod
+  labels:                               # Specifies the Label details under it
+    myname: ADAM
+    myorg: WEZVATECH
+spec:
+    containers:
+       - name: c00
+         image: ubuntu
+         command: ["/bin/bash", "-c", "while true; do echo Hello-Adam; sleep 5 ; done"]
+
+$ kubectl get pods --show-labels
+$ kubectl get pods -l myname=ADAM
+$ kubectl label pods testpod myname=student
+$ kubectl get pods -l myname!=ADAM
+$ kubectl get pods -l 'myname in (ADAM, student)'
+$ kubectl get pods -l 'myname notin (ADAM, student)'
+$ kubectl delete pod -l 'myname in (ADAM, student)'  
+
+pod5.yml
+-------------
+kind: Pod
+apiVersion: v1
+metadata:
+  name: nodelabels
+  labels:
+    env: dev
+spec: 
+    containers:
+       - name: c00
+         image: ubuntu
+         command: ["/bin/bash", "-c", "while true; do echo Hello-Adam; sleep 5 ; done"]
+    nodeSelector:      # specifies which node to run the pod
+       mynode: demonode
+
+$ kubectl label nodes ip-172-31-34-21 mynode=demonode
+
+Replication Controller Objects
+======================
+ - Helps in replication of pods & scaling of pods
+1. pod spec/template
+2. label
+3. # of replicas
+
+* Replica set - scale & replicate
+* Deployment - scale & replicate, rolling-update, rollback
+  - used for deploying stateless application - frontend or application layer
+* Daemonset - used for deploying applications one replica per worker node - monitoring, logging, networking
+  - we do not give the replicas
+  - we cannot scale the replicas
+* Statefulset
+  - used for deploying stateful application - database
+
+
+--------------deploy.yml-----
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+   name: mydeploy
+spec:
+   replicas: 2
+   selector:      # tells the controller which pods to watch/belong to
+    matchLabels:
+     name: deployment
+   template:      # pod template
+     metadata:
+       name: testpod
+       labels:
+         name: deployment
+     spec:
+      containers:
+        - name: main
+          image: ubuntu  # ubuntu:22.10
+          command: ["/bin/bash", "-c", "while true; do echo Hello-Adam; sleep 5; done"]
+
+$ kubectl get deploy
+$ kubectl get rs
+$ kubectl describe deploy mydeploy
+$ kubectl rollout status deploy/mydeploy
+$ kubectl rollout history deploy/mydeploy
+$ kubectl rollout undo deploy/mydeploy --to-revision=1
+
+-----daemonset----
+kind: DaemonSet      # Type of Object
+apiVersion: apps/v1
+metadata:
+  name: demodaemonset
+  labels:
+    env: demo
+spec:
+  selector:
+    matchLabels:
+      env: demo
+  template:
+    metadata:
+      labels:
+        env: demo
+    spec:
+      containers:
+      - name: demonset
+        image: ubuntu
+        command: ["/bin/bash", "-c", "while true; do echo Hello-Adam; sleep 8 ; done"]
+
+Networking
+--------------
+kind: Pod
+apiVersion: v1
+metadata:
+  name: microservice1
+spec:
+  containers:
+    - name: main
+      image: ubuntu
+      command: ["/bin/bash", "-c", "while true; do echo Hello-Adam; sleep 5 ; done"]
+    - name: sidecar
+      image: httpd
+      ports:
+       - containerPort: 80
+
+$ kubectl exec microservice1 -c main -it -- /bin/bash
+  $ apt update && apt install -y curl
+  $ curl localhost:80
+
+kind: Pod
+apiVersion: v1
+metadata:
+  name: microservice2
+spec:
+  containers:
+    - name: main
+      image: nginx
+      ports:
+       - containerPort: 80
+
+SERVICES
+=========
+* used for accessing the application without worrying about changing POD IP's
+* load balances the traffic
+* access the application outside the cluster
+ - clusterIP (default)
+ - nodeport
+ - loadbalancer/ingress ( NodePort + AWS load balancer)
+ - headless
+
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+   name: mydeploy
+spec:
+   replicas: 2
+   selector:      # tells the controller which pods to watch/belong to
+    matchLabels:
+     name: deployment
+   template:
+     metadata:
+       name: testpod8
+       labels:
+         name: deployment
+     spec:
+      containers:
+        - name: c00
+          image: httpd
+          ports:
+           - containerPort: 80
+         
+
+------------------Service--------------------
+kind: Service                             # Defines to create Service type Object
+apiVersion: v1
+metadata:
+  name: demoservice
+spec:
+  ports:
+    - port: 80                               # service port exposed
+      targetPort: 80                     # Pods port
+  selector:
+    name: deployment    # Apply this service to any pods which has the specific label
+  type: ClusterIP                      
+
+$ kubectl get svc
+$ kubectl describe svc demoservice
+
+$ kubectl exec mydeploy-5858c7658d-qpmsg -it -- /bin/bash
+   -  echo "I AM POD1" >> ./htdocs/index.html
+
+---------------------
+kind: Service                             # Defines to create Service type Object
+apiVersion: v1
+metadata:
+  name: demoservice
+spec:
+  ports:
+    - port: 80                              # Containers port exposed
+      targetPort: 80               # Pods port
+  selector:
+    name: deployment               # Apply this service to any pods which has the specific label
+  type: NodePort
+  # 30000 - 32767
+
+Healthchecks
+==========
+* livenessprobe
+ - container gets recreated if check fails
+* readinessprobe
+ - doesnt send the traffic to that pod
+
+- What cmd/script to run
+- how frequently to run
+- we should make sure the script is available inside the Image & it returns appropriate return code
+- 0 return indicates container is healthy, non-zero indicates container is not healthy
+
+
+------livenessprobe-----
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+   name: mydeploy
+spec:
+   replicas: 1
+   selector:      # tells the controller which pods to watch/belong to
+    matchLabels:
+     name: deployment
+   template:
+     metadata:
+       name: testpod8
+       labels:
+         name: deployment
+     spec:
+      containers:
+        - name: c00
+          image: httpd
+          ports:
+           - containerPort: 80
+          livenessProbe:                  # define the health check
+           exec:
+             command:                    # command to run periodically
+             - ls
+             - /tmp/lp
+           initialDelaySeconds: 30 # Wait for the specified time before it runs the first 
+           periodSeconds: 5        # Run the above command every 5 sec
+           timeoutSeconds: 10
+
+---readinessprobe---
+
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+   name: mydeploy
+spec:
+   replicas: 2
+   selector:      # tells the controller which pods to watch/belong to
+    matchLabels:
+     name: deployment
+   template:
+     metadata:
+       name: testpod8
+       labels:
+         name: deployment
+     spec:
+      containers:
+        - name: c00
+          image: httpd
+          ports:
+           - containerPort: 80
+          readinessProbe:    # define the health check
+           exec:
+            command:    # command to run periodically
+            - ls
+            - /tmp/rp
+           initialDelaySeconds: 30 # Wait for the specified time before it runs the first probe
+           periodSeconds: 5   # Run the above command every 5 sec
+           timeoutSeconds: 30
+
+Volumes
+=======
+* Volumes are Pod level
+ - emptydir: sharing volume between containers within a single pod
+ - hostpath: sharing volume between a pod & a host machine
+ - persistentvolume: sharing volume outside the cluster
+
+-------------------emptydir.yml----
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myvolemptydir
+spec:
+  containers:
+  - name: main
+    image: centos  
+    command: ["/bin/bash", "-c", "sleep 10000"]
+    volumeMounts:                          # -v emptydir:"/tmp/xchange"
+      - name: xchange
+        mountPath: "/tmp/xchange"          # Path inside the container to share
+  - name: sidecar
+    image: centos
+    command: ["/bin/bash", "-c", "sleep 10000"]
+    volumeMounts:                          # -v emptydir:"/tmp/data"
+      - name: xchange
+        mountPath: "/tmp/data"
+  volumes:                                            # Definition for host
+  - name: xchange
+    emptyDir: {}
+
+$ kubectl exec myvolemptydir -c main  -- ls /tmp/xchange
+$ kubectl exec myvolemptydir -c sidecar -- ls /tmp/data
+$ kubectl exec myvolemptydir -c main -- touch /tmp/xchange/C1
+$ kubectl exec myvolemptydir -c sidecar -- touch /tmp/data/C2
+
+---------------------hostpath.yml-------------
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myvolhostpath
+spec:
+  containers:
+  - image: centos
+    name: testc
+    command: ["/bin/bash", "-c", "sleep 10000"]
+    volumeMounts:
+    - mountPath: /tmp/hostpath
+      name: testvolume
+  volumes:
+  - name: testvolume
+    hostPath:
+      path: /tmp/data   # -v <hostpath>:<containerpath>
+
+-----------------------------pv.yml-------
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: myebsvol
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Recycle
+  awsElasticBlockStore:
+    volumeID: vol-08f716c61e9010a0f
+    fsType: ext4
+
+$ kubectl get pv
+$ kubectl describe pv myebsvol
+----------------------------pvc.yml-------
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: myebsvolclaim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+$ kubectl get pvc
+$ kubectl describe pvc myebsvolclaim
+
+---------------------------------------deploypv.yml----
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pvdeploy
+spec:
+  replicas: 1
+  selector:      # tells the controller which pods to watch/belong to
+    matchLabels:
+     app: mypv
+  template:
+    metadata:
+      labels:
+        app: mypv
+    spec:
+      containers:
+      - name: shell
+        image: centos
+        command: ["/bin/bash", "-c", "sleep 10000"]
+        volumeMounts:
+        - name: mypd
+          mountPath: "/tmp/persistent"
+      volumes:
+        - name: mypd
+          persistentVolumeClaim:
+            claimName: myebsvolclaim
+
+Virtual Memory
+============
+* Configmap - application configuration files (db host, db-user, db-table, log level, heap memory)
+* Secret - for any sensitive data, certificates (keystores, password,certificates)
+ - Size of the object should be <= 1 MB
+
+$ touch certificate; echo "YOUCANSEEME" > password.txt
+$ kubectl create secret generic mypasswd --from-file=password.txt 
+$ kubectl create secret generic mycert --from-file=certificate
+$ kubectl get secret
+$ kubectl describe secret mycert
+
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+   name: mydeployments
+spec:
+   replicas: 1
+   selector:      # tells the controller which pods to watch/belong to
+    matchLabels:
+     name: deployment
+   template:
+     metadata:
+       name: testpod8
+       labels:
+         name: deployment
+     spec:
+      containers:
+        - name: main
+          image: ubuntu
+          command: ["/bin/bash", "-c", "while true; do echo Hello-Adam; sleep 5; done"]
+          volumeMounts:
+          - name: passwdsecret
+            mountPath: "/tmp/passwd"   # the secret files will be mounted as ReadOnly by default here
+          - name: certificate
+            mountPath: "/tmp/certs"   # the secret files will be mounted as ReadOnly by default here
+      volumes:
+      - name: passwdsecret
+        secret:
+         secretName: mypasswd  
+      - name: certificate
+        secret:
+         secretName: mycert
+
+-----------------------
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myenvsecret
+spec:
+  containers:
+  - name: c1
+    image: centos
+    command: ["/bin/bash", "-c", "while true; do echo Hello-Adam; sleep 5 ; done"]
+    env:
+    - name: MYDBPASSWD          # env name in which value of the key is stored
+      valueFrom:
+        secretKeyRef:
+          name: mypasswd       # name of the secret created
+          key: password.txt    # name of the key
+
+$ kubectl create configmap mymap --from-file=sample.conf
+$ kubectl get cm
+$ kubectl describe configmaps mymap
+$ kubectl get configmap mymap -o yaml
+
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+   name: mydeployments
+spec:
+   replicas: 1
+   selector:      # tells the controller which pods to watch/belong to
+    matchLabels:
+     name: deployment
+   template:
+     metadata:
+       name: testpod8
+       labels:
+         name: deployment
+     spec:
+      containers:
+        - name: c00
+          image: ubuntu
+          command: ["/bin/bash", "-c", "while true; do echo Hello-Adam; sleep 5; done"]
+          volumeMounts:
+          - name: appconfig
+            mountPath: "/tmp/config"    
+      volumes:
+      - name: appconfig
+        configMap:
+         name: mymap   # this should match the config map name created in the first step
+         items:
+         - key: sample.conf # the name of the file used during creating the map
+           path: sample.conf
+
+Namespace
+==========
+apiVersion: v1
+kind: Namespace
+metadata:
+   name: demo
+   labels:
+     name: development
+
+
+$ kubectl get ns
+$ kubectl get pods -n demo
+$ kubectl apply -f pod1.yml -n demo
+$ kubectl delete -f pod1.yml -n demo
+$ kubectl config set-context $(kubectl config current-context) --namespace=demo
+$ kubectl config view | grep namespace:	
+
+Init Containers
+===========
+* Before the main container starts if we need to do certain tasks i.e
+ - clone of a git repo
+ - seeding a db
+ - starting another application or service
+
+* Init containers will be created first in the pod
+* Init startup cmd/script will be executed & the container will get seized after the cmd/script completion
+* After this main container will be created
+* Init containers do not have healthcheck
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: initpod
+spec:
+  initContainers:
+  - name: init
+    image: centos
+    command: ["/bin/sh", "-c", "echo WEZVATECH-KUBERNETES > /tmp/xchange/testfile; sleep 30"]
+    volumeMounts:        
+      - name: xchange
+        mountPath: "/tmp/xchange"  
+  containers:   # main containers
+  - name: main
+    image: ubuntu
+    command: ["/bin/bash", "-c", "while true; do echo `cat /tmp/data/testfile`; sleep 5; done"]
+    volumeMounts:
+      - name: xchange
+        mountPath: "/tmp/data"
+  volumes:                            
+  - name: xchange
+    emptyDir: {}
+
+-----------------------
+Sidecar Container
+-----------------------
+* A sidecar container allows you to run an additional container alongside your main container in the same pod, to perform tasks that enhance the main container.
+* sidecar container should startup, shut down, and scale with the main container
+* The sidecar will only serve the main application, and its lifecycle starts and ends with the main application’s lifecycle
+* When a pod starts, all the containers start at the same time
+
+UseCases:
+* Sync data from a remote source to a local volume that is shared by the main container, such as configuration files, secrets, or certificates.
+* Log management using sidecar containers 
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wezvatech-logapp-sidecar1
+spec:
+  replicas: 1 
+  selector:
+    matchLabels:
+      app: wezvatech-logapp 
+  template:
+    metadata:
+      labels:
+        app: wezvatech-logapp #
+    spec:
+      volumes:
+        - name: log-volume # Define a volume to store the logs
+          emptyDir: {} # Use an emptyDir volume type
+      containers:
+        - name: log-generator # Main container
+          image: busybox 
+          command: ["/bin/sh"] # Override the default command
+          args: ["-c", "while true; do date >> /var/log/wezvatech.log; sleep 5; done"] 
+          volumeMounts:
+            - name: log-volume 
+              mountPath: /var/log 
+        - name: log-reader # Sidecar container
+          image: busybox 
+          command: ["/bin/sh"] 
+          args: ["-c", "tail -f /var/log/wezvatech.log"] 
+          volumeMounts:
+            - name: log-volume 
+              mountPath: /var/log 
+
+#-- Access logs from main container using HTTP in sidecar --#
+kind: Pod
+apiVersion: v1
+metadata:
+  name: wezvatech-logapp-sidecar2
+  labels:
+     sidecar: log
+spec:
+  volumes:
+  - name: logs
+    emptyDir: {}
+  containers:
+  - name: wezvatechapp
+    image: ubuntu
+    command: ["/bin/sh"]
+    args: ["-c", "while true; do date >> /var/log/date.txt; sleep 10; done"]
+    volumeMounts:
+    - name: logs
+      mountPath: /var/log
+  - name: sidecar
+    image: centos/httpd
+    ports:
+    - containerPort: 80
+    volumeMounts:
+    - name: logs
+      mountPath: /var/www/html
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: demoservice
+spec:
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30080
+  selector:
+    sidecar: log
+  type: NodePort
+	  
+	  
+# Access the logs using "curl localhost:30080/date.txt"
+
+Setup Kind on a new server with t3a.xlarge (4CPU, 16GB RAM, 15GB HD)
+================================
+$ sudo apt update && sudo apt -y install docker.io
+$ sudo usermod -a -G docker ubuntu
+$ curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.23.7/bin/linux/amd64/kubectl && chmod +x ./kubectl && sudo mv ./kubectl /usr/local/bin/kubectl
+$ sudo curl -L "https://kind.sigs.k8s.io/dl/v0.20.0/kind-$(uname)-amd64" -o /usr/local/bin/kind && sudo chmod +x /usr/local/bin/kind 
+$ kind create cluster --name wezvatechdemo --config=multi-node.yml
+
+# multi-node.yml
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+  extraPortMappings:
+  - containerPort: 30080
+    hostPort: 30080
+    listenAddress: "0.0.0.0"
+    protocol: TCP
+- role: worker
+- role: worker  
+
+------------------------------------
+TAINT AND TOLERATIONS
+------------------------------------
+* Taints are a property of nodes that push pods away if they don't tolerate this taint. Like Labels, one or more Taints can be applied to a node
+* Taints are Node level & Tolerations are Pod level
+ - NoSchedule: The pod will not get scheduled to the node without a matching toleration.
+ - NoExecute: This will immediately evict all the pods without the matching toleration from the node.
+ - PerferNoSchedule: The pod will not get scheduled to the node without a matching toleration. But if the pod tolerates any one taint, it can be scheduled. This is a soft constraint.
+
+Use Cases
+--------------
+* Dedicated Nodes
+* Nodes with Special Hardware (GPUs)
+* Taint based Evictions
+
+testpod.yaml
+------------
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demopod
+spec:
+  containers:
+  - name: demopod
+    image: nginx
+
+$ kubectl apply -f testpod.yml
+$ kubectl descirbe pod demopod
+
+* Tolerations are applied to pods, and allow the pods to schedule onto nodes with matching taints
+* Taints and tolerations work together to ensure that pods are not scheduled onto inappropriate nodes
+
+$ kubectl taint nodes <nodename> <key>=<value>:<effect>
+$ kubectl taint nodes <nodename> taint=true:NoSchedule
+$ kubectl describe node <nodename> | grep -i Taint
+
+taintpod.yaml
+-------------
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-taint
+spec:
+  containers:
+  - name: demotaint
+    image: nginx
+  tolerations:
+  - key: "taint"
+    value: "true"
+    effect: "NoSchedule"
+
+$ kubectl apply -f taintpod.yml
+$ kubectl describe pod demo-taint
+
+* Taints are Node level & Tolerations are Pod level
+ - NoSchedule: The pod will not get scheduled to the node without a matching toleration.
+ - NoExecute: This will immediately evict all the pods without the matching toleration from the node.
+
+
+Without Taint on a node, Toleration wont be considered
+----------------------------------------------------------------------------
+# Remove taint
+ $ kubectl taint nodes <nodename> taint=true:NoSchedule-
+
+# Create the above pod
+ $ kubectl apply -f taintpod.yml
+
+# Apply the taint on node, Noschedule will prevent any new pods and excludes running pods
+ $ kubectl taint nodes <nodename> taint=true:NoSchedule
+
+# Apply taint on node with NoExecute will remove existing pods without tolerations
+$ kubectl taint nodes <nodename> taint=true:NoExecute
+
+----------------
+Node Affinity
+----------------
+# requiredDuringScheduling: The scheduler can't schedule the Pod unless the rule is met
+# preferredDuringScheduling: The scheduler tries to find a node that meets the rule. If a matching node is not available, the scheduler still schedules the Pod.
+# IgnoredDuringExecution: This means that if the node labels change after Kubernetes schedules the Pod, the Pod continues to run
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-affinity-hard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        ports:
+        - containerPort: 80
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: myname
+                operator: In
+                values:
+                - nodeaffinity
+
+$ kubectl apply -f nodeaffinityhard.yml
+$ kubectl label nodes <node> myname=nodeaffinity
+
+# Remove the node label and see pod continues to run due to "IgnoredDuringExecution"
+$ kubectl label nodes <node> myname-
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-affinity-soft
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            preference:
+              matchExpressions:
+              - key: myname
+                operator: In
+                values:
+                - nodeaffinity
+
+-------------------
+POD AFFINITY
+-------------------
+* With podAffinity the Pods will be scheduled in the same node as the other Pods that match the expression
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pod-affinity-child
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-controller
+  template:
+    metadata:
+      labels:
+        app: nginx-controller
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        ports:
+        - containerPort: 80
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: myname
+                operator: In
+                values:
+                - parent
+            topologyKey: "kubernetes.io/hostname" 
+           # Pods will be scheduled on the same hostname as a Pod that matches the expression.
+
+parentpod.yml:
+-------------
+apiVersion: v1
+kind: Pod
+metadata:
+  name: parent-pod-webapp
+  labels:
+    myname: parent
+spec:
+  containers:
+  - name: parentpodwebapp
+    image: nginx
+
+$ kubectl apply -f parentpod.yml
+
+--------------------------
+POD ANTI-AFFINITY
+--------------------------
+* The ant-affinity rule will try to keep away pods from getting scheduled on nodes with containers with the key-value pair
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pod-anti-affinity-child
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-controller
+  template:
+    metadata:
+      labels:
+        app: nginx-controller
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        ports:
+        - containerPort: 80
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: myname
+                operator: In
+                values:
+                - parent
+            topologyKey: "kubernetes.io/hostname"
+
+
+$ kubectl taint nodes <node1> taint=true:NoSchedule-
+$ kubectl apply
+
+------------------
+LIMITATIONS
+------------------
+
+# Taints/Tolerations with Node Affinity
+------------------------------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-affinity-with-taint
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        ports:
+        - containerPort: 80
+      tolerations:
+      - key: "taint"
+        value: "true"
+        effect: "NoSchedule"
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: myname
+                operator: In
+                values:
+                - nodeaffinity
+
+# remove taint & label from any existing nodes and apply them only on 1 node
+$ kubectl label nodes <node> myname-
+$ kubectl taint nodes <node> taint=true:NoSchedule-
+$ kubectl label nodes <node> myname=nodeaffinity
+$ kubectl taint nodes <node> taint=true:NoSchedule
+
+--------------------------------
+Pod Priority & Preemption
+--------------------------------
+* Pods can have priority. Priority indicates the importance of a Pod relative to other Pods. 
+* If a Pod cannot be scheduled, the scheduler tries to preempt (evict) lower priority Pods to make scheduling of the pending Pod possible
+
+# app1
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app1
+  labels:
+    env: dev
+spec:
+  containers:
+  - name: app1
+    image: nginx
+    resources:
+      requests:
+        memory: "4Gi"
+        cpu: "2"
+      limits:      
+        memory: "4Gi"
+        cpu: "2"
+
+$ kubectl apply -f app1.yml 
+
+---
+# app2
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app2
+  labels:
+    env: preprod
+spec:
+  containers:
+  - name: app2
+    image: nginx
+    resources:
+      requests:
+        memory: "4Gi"
+        cpu: "1"
+      limits:      
+        memory: "4Gi"
+        cpu: "2"
+
+$ kubectl apply -f app2.yml 
+
+---
+# app3
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app3
+  labels:
+    env: prod
+spec:
+  containers:
+  - name: app3
+    image: nginx
+    resources:
+      requests:
+        memory: "4Gi"
+        cpu: "2"
+      limits:      
+        memory: "4Gi"
+        cpu: "2"
+
+$ kubectl apply -f app3.yml 
+$ kubectl get pods 
+$ kubectl describe pod app3
+$ kubectl describe pod app1 |grep -i priority
+$ kubectl describe pod app2 |grep -i priority
+
+$ apt update && apt install -y stress && stress --vm 2 --vm-bytes 128M
+$ echo "CPU Usage: "$[100-$(vmstat 1 2|tail -1|awk '{print $15}')]"%"
+
+# Create PriorityClass
+  --------------------------
+* PriorityClass is non-namespaced
+* Default Priority of pods without any Priorityclass is Zero
+* The higher the value, the higher the priority.
+
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: high-priority
+value: 1000000
+globalDefault: false
+description: "This priority class should be used for critical service pods only."
+
+$ kubectl apply -f highpc.yml
+
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: low-priority
+value: 200000
+globalDefault: false
+description: "This priority class should be used for good to have service pods only."
+
+$ kubectl apply -f lowpc.yml
+$ kubectl get pc
+
+---
+# app2 with priorityclass
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app2
+  labels:
+    env: preprod
+spec:
+  containers:
+  - name: app2
+    image: nginx
+    resources:
+      requests:
+        memory: "4Gi"
+        cpu: "1"
+      limits:      
+        memory: "4Gi"
+        cpu: "2"
+  priorityClassName: low-priority
+
+$ kubectl delete -f app2.yml 
+$ kubectl apply -f app2.yml 
+$ kubectl describe pod app2 |grep -i priority
+
+# app3 with priorityclass
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app3
+  labels:
+    env: dev
+spec:
+  containers:
+  - name: app3
+    image: nginx
+    resources:
+      requests:
+        memory: "4Gi"
+        cpu: "2"
+      limits:      
+        memory: "4Gi"
+        cpu: "2"
+  priorityClassName: high-priority
+
+$ kubectl delete -f app3.yml
+$ kubectl get pods --watch 
+$ kubectl apply -f app3.yml 
+
+* Pods with preemptionPolicy: Never will be placed in the scheduling queue ahead of lower-priority pods,
+  but they cannot preempt other pods
+  
+- Delete all the pods & Priorityclass. Recreate app1, app2 and try creating app3 in the last & see pods will not be evicted 
+
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: high-priority
+value: 1000000
+preemptionPolicy: Never
+globalDefault: false
+description: "This priority class should be used for critical service pods only."
+
+$ kubectl apply -f highpc.yml
+$ kubectl apply -f app3.yml
+
+# To check how the queue works, create app4 & when both app3/app4 is in pending state, delete app1 
+# app4
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app4
+  labels:
+    env: dev
+spec:
+  containers:
+  - name: app4
+    image: nginx
+    resources:
+      requests:
+        memory: "4Gi"
+        cpu: "2"
+      limits:      
+        memory: "4Gi"
+        cpu: "2"
+
+------------------------------
+Pod Disruption Budgets
+------------------------------
+* PDB features to help you run highly available applications even when you introduce frequent voluntary disruptions.
+* A PDB limits the number of Pods of a replicated application that are down simultaneously from voluntary disruptions
+* PDB allows you to limit the disruption to your application when its pods need to be rescheduled for some reason such as upgrades or routine maintenance work on the Kubernetes nodes
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pdb
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: pdb
+  template:
+    metadata:
+      labels:
+        app: pdb
+    spec:
+      containers:
+      - name: pdb
+        image: nginx
+        ports:
+        - containerPort: 80
+
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: demo-pdb
+spec:
+  minAvailable: 3
+  selector:
+    matchLabels:
+      app: pdb
+
+$ kubectl apply -f pdb.yml
+$ kubectl get pdb
+
+# Drain evicts/deletes from a node
+$ kubectl drain --ignore-daemonsets <node name>
+
+# Cordon will mark the node as schedulable & Uncordon will make it schedulable
+$ kubectl uncordon <node name>
+
+NOTE: PDB will help to control pods getting disrupted, PriorityClass will help to schedule the pod
+
+- Edit the PDB & change the minAvailable to 2 and try drain the node again
+
+*** Kubernetes has 3 types of policies ***
+---------------------
+Network Policies
+---------------------
+# Create a new Kind cluster using below config file: 
+# Note: Since default CNI is disabled, nodes will not be ready until calico is installed
+
+$ kind delete clusters wezvatechdemo
+
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+  extraPortMappings:
+  - containerPort: 30002
+    hostPort: 30002
+    listenAddress: "0.0.0.0"
+    protocol: TCP
+- role: worker
+- role: worker
+networking:
+  disableDefaultCNI: true
+  podSubnet: "192.168.0.0/16"
+
+$ kind create cluster --name wezvatechcalico --config=kind-calico.yml
+
+- By default, pods can communicate with each other by their IP address, regardless of the namespace they're in.
+- You can see the IP address of each pod with:
+$ kubectl get pods -o wide -A 
+
+- A Service also has an IP address and additionally a DNS name. A Service is backed by a set of pods. 
+The Service forwards requests to itself to one of the backing pods. The fully qualified DNS name of a Service is:
+     <service-name>.<service-namespace>.svc.cluster.local
+	 
+- Calico uses 192.168.0.0/16 by default
+
+# Install Calico
+   ----------------
+$ kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.3/manifests/tigera-operator.yaml
+$ kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.3/manifests/custom-resources.yaml
+$ kubectl get pods -n calico-system --watch
+$ kubectl get nodes
+
+# Create the frontend, backend, client, and management-ui Demo apps
+   ---------------------------------------------------------------------------------------
+$ kubectl create -f https://docs.tigera.io/files/00-namespace.yaml
+$ kubectl create -f https://docs.tigera.io/files/01-management-ui.yaml
+$ kubectl create -f https://docs.tigera.io/files/02-backend.yaml
+$ kubectl create -f https://docs.tigera.io/files/03-frontend.yaml
+$ kubectl create -f https://docs.tigera.io/files/04-client.yaml
+
+$ kubectl get all -n management-ui
+$ kubectl get all -n stars
+$ kubectl get all -n client
+
+# Access the Management UI using http://<kind-node-ip>:30002
+		backend -> Node "B"
+		frontend -> Node "F"
+		client -> Node "C"
+		
+# Disable access to frontend, backend & client service from UI
+  -----------------------------------------------------------------------------
+$ kubectl create -n stars -f https://docs.tigera.io/files/default-deny.yaml
+$ kubectl create -n client -f https://docs.tigera.io/files/default-deny.yaml
+
+# Allow the UI to access the services
+  ---------------------------------------------
+$ kubectl create -f https://docs.tigera.io/files/allow-ui.yaml
+$ kubectl create -f https://docs.tigera.io/files/allow-ui-client.yaml
+
+# Allow traffic from the frontend to the backend
+  ---------------------------------------------------------
+$ kubectl create -f https://docs.tigera.io/files/backend-policy.yaml
+
+# Expose the frontend service to the client namespace
+  -------------------------------------------------------------------
+$ kubectl create -f https://docs.tigera.io/files/frontend-policy.yaml
+
+# Cleanup
+$ kubectl delete ns client stars management-ui
+
+--------------------
+ResourceQuota
+-------------------
+* ResourceQuota provides constraints that limit total resource consumption per namespace.
+* It can limit the quantity of objects that can be created in a namespace by type, as well as the total amount of compute resources that may be consumed by resources in that namespace.
+
+# Object Count Quota (pods/services/configmap/secrets/PVC/deployments/replicaset/network-policies)
+  -------------------------
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: pod-demo
+  namespace: quota-pod
+spec:
+  hard:
+    pods: "2"
+	
+$ kubectl create namespace quota-pod 
+$ kubectl apply -f podquota.yml 
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pod-quota-demo
+  namespace: quota-pod
+spec:
+  selector:
+    matchLabels:
+      purpose: quota-demo
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        purpose: quota-demo
+    spec:
+      containers:
+      - name: pod-quota-demo
+        image: nginx
+
+$ kubectl apply -f podquotademo.yml 
+
+# Compute Resource Quota
+  ------------------------------------
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: mem-cpu-demo
+  namespace: quota-mem-cpu
+spec:
+  hard:
+    requests.cpu: "1"
+    requests.memory: 1Gi
+    limits.cpu: "2"
+    limits.memory: 2Gi
+
+$ kubectl create namespace quota-mem-cpu 
+$ kubectl apply -f memcpuquota.yml 
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: memcpu-quota-demo
+  namespace: quota-mem-cpu
+spec:
+  selector:
+    matchLabels:
+      purpose: quota-demo
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        purpose: quota-demo
+    spec:
+      containers:
+      - name: memcpu-quota-demo
+        image: nginx
+        resources:
+         limits:
+           memory: "1Gi"
+           cpu: "800m"
+         requests:
+           memory: "700Mi"
+           cpu: "400m"
+		
+$ kubectl apply -f memcpuquotademo.yml
+
+---------------
+Limit Range
+---------------
+* Within a namespace, a Pod can consume as much CPU and memory as is allowed by the ResourceQuotas that apply to that namespace
+* LimitRange is a policy to constrain the resource allocations (limits and requests) that you can specify for each applicable pod in a namespace.
+* A LimitRange provides constraints that can:
+  - Set default request/limit for pod resources (cpu or memory) in a namespace
+  - Enforce minimum and maximum compute resources usage per Pod/container 
+  
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: cpumem-resource-constraint
+  namespace: limitrange-mem-cpu 
+spec:
+  limits:
+  - default: # this section defines default limits
+      cpu: 500m
+      memory: 500Mi
+    defaultRequest: # this section defines default requests
+      cpu: 500m
+      memory: 500Mi
+    max: # max and min define the limit range
+      cpu: "1"
+      memory: 1Gi
+    min:
+      cpu: 100m
+      memory: 500Mi
+    type: Container
+
+$ kubectl create namespace limitrange-mem-cpu 
+$ kubectl apply -f memcpu_limitrange.yml 
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: limitrange-demo-1
+  namespace: limitrange-mem-cpu 
+spec:
+  containers:
+  - name: constraints-demo-ctr
+    image: nginx
+		
+apiVersion: v1
+kind: Pod
+metadata:
+  name: limitrange-demo-1
+  namespace: limitrange-mem-cpu 
+spec:
+  containers:
+  - name: constraints-demo-ctr
+    image: nginx
+    resources:
+      limits:
+        memory: "800Mi"
+      requests:
+        memory: "600Mi"
+
+# ResourceQuota to control how many objects to create within a namespace and also to control total resource utilization within a namespace
+# LimitRange to control resource utilization per pod within a namespace and also set default pod resources
+
+---------------------
+Container Hooks
+---------------------
+There are two hooks that are exposed to Containers:
+* PostStart: This hook is executed immediately after a container is created. The Container's status is not set to RUNNING until the postStart handler completes
+
+* PreStop: This hook is called immediately before a container is terminated due to an API request or management event such as a liveness/startup probe failure 
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: lifecycle-demo
+spec:
+  containers:
+  - name: lifecycle-demo-container
+    image: nginx
+    lifecycle:
+      postStart:
+        exec:
+          command: ["/bin/sh", "-c", "echo Hello from the postStart handler > /usr/share/message"]
+      preStop:
+        exec:
+          command: ["/bin/sh","-c","nginx -s quit; while killall -0 nginx; do sleep 1; done"]
+
+$ kubectl apply -f hooks.yml 
+$ kubectl describe pod lifecycle-demo 
+
+SSL Certificate 
+============
+1. create a private key
+2. create a CSR (certificate signing request) - CA (certificate authority)
+3. create the ssl certificate with the help of csr
+
+----------------------------------
+  Authorization and RBAC
+----------------------------------
+* Authenticating a user:
+  ================
+# create private key
+  -------------------------
+$ openssl genrsa -out adam.key 2048
+$ openssl req -new -key adam.key -out adam.csr -subj "/CN=adam/O=eng"\n
+$ cat adam.csr | base64 | tr -d '\n'
+
+# Create a CertificateSigningRequest
+  --------------------------------------------------
+apiVersion: certificates.k8s.io/v1
+kind: CertificateSigningRequest
+metadata:
+  name: adamcsr
+spec:
+  request: <CSR-TOKEN>
+  signerName: kubernetes.io/wezvatechnologies
+  expirationSeconds: 86400  # one day
+  usages:
+  - client auth
+
+$ kubectl apply -f adam-signing-request.yml
+$ kubectl get csr
+
+# Approve the CSR 
+  -------------------------
+$ kubectl certificate approve adamcsr
+$ kubectl get csr 
+
+# Export the issued certificate from the CertificateSigningRequest
+  ----------------------------------------------------------------------------------------
+$ kubectl get csr adamcsr -o jsonpath='{.spec.request}' | base64 -d > adam.crt
+
+# Add user into the kubeconfig file
+  ---------------------------------------------
+$ kubectl config set-credentials adam --client-key=adam.key --client-certificate=adam.crt --embed-certs=true
+$ kubectl config set-context adam --cluster=minikube --user=adam 
+
+# Test
+    ------
+$ kubectl auth can-i list pods --as adam
+
+# Create Role - access specific to a namespace
+  -----------------------------------------------------------
+$ kubectl apply -f reader-role.yml
+$ kubectl get roles
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: default
+  name: reader-role
+rules:
+- apiGroups: [""] 
+  resources: ["pods","services","nodes"]
+  verbs: ["get", "watch", "list"]
+
+# Bind Role 
+  --------------
+$ kubectl apply -f reader-role-binding.yml
+$ kubectl get rolebinding
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: read-access
+  namespace: default
+subjects:
+- kind: User
+  name: adam 
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role 
+  name: reader-role
+  apiGroup: rbac.authorization.k8s.io
+
+# Test 
+  ----
+$ kubectl get pods --as adam 
+$ kubectl get pods -n kube-system --as adam 
+
+# Create Cluster level Role
+  -----------------------------------
+$ kubectl apply -f clusterrole.yml 
+$ kubectl get clusterroles
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: cluster-role
+rules:
+- apiGroups: [""] 
+  resources: ["pods","services","nodes"]
+  verbs: ["get", "watch", "list"]
+
+# Bind Cluster Role
+  -----------------------
+$ kubectl apply -f clusterrole-binding.yml
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: read-global
+subjects:
+- kind: User
+  name: adam 
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: cluster-role
+  apiGroup: rbac.authorization.k8s.io
+
+# Test 
+$ kubectl get pods -n kube-system --as adam 
+$ kubectl get nodes --as adam 
+
+* Authenticating a ServiceAccount:
+  =========================
+# Create a Service Account
+  -----------------------------------
+$ kubectl create sa demosa 
+$ kubectl get sa 
+$ kubectl get secret 
+
+# verify the pod associated with default service-account
+   -------------------------------------------------------------------------
+$ kubectl get pod testpod -o yaml | grep serviceAccount: 
+apiVersion: v1
+kind: Pod
+metadata:
+  name: testpod
+spec:
+  containers:
+  - name: myapp
+    image: ubuntu
+    command: ["/bin/bash","-c","while true; do echo Hello-Adam;sleep 8; done"]
+
+$ kubectl get pod testpodsa -o yaml | grep serviceAccount: 
+apiVersion: v1
+kind: Pod
+metadata:
+  name: testpodsa
+spec:
+  serviceAccount: demosa
+  containers:
+  - name: myapp
+    image: ubuntu
+    command: ["/bin/bash","-c","while true; do echo Hello-Adam;sleep 8; done"]
+
+# Test API call
+  ------------------
+$ kubectl exec -it testpodsa -- /bin/bash
+   $ apt update && apt install -y curl
+   $ TOKEN=`cat /var/run/secrets/kubernetes.io/serviceaccount/token`
+   $ curl https://kubernetes -k --header "Authorization: Bearer $TOKEN"
+
+# Apply Reader role from above
+# Bind Role to Service-Account
+  -----------------------------------------
+$ kubectl apply -f reader-role-binding-sa.yml
+$ kubectl get rolebinding
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: read-access-sa
+  namespace: default
+subjects:
+- kind: ServiceAccount
+  name: demosa
+roleRef:
+  kind: Role 
+  name: reader-role
+  apiGroup: rbac.authorization.k8s.io
+
+# Test API calls
+    ------------------
+$ kubectl exec -it testpodsa -- /bin/bash
+ $ TOKEN=`cat /var/run/secrets/kubernetes.io/serviceaccount/token`
+ $ curl https://kubernetes/api/v1/namespaces/default/pods -k --header "Authorization: Bearer $TOKEN"
+ $ curl https://kubernetes/api/v1/namespaces/kube-system/pods -k --header "Authorization: Bearer $TOKEN"
+
+AUTOSCALING
+===========
+* HPA (Horizontal Pod Autoscaler)
+ - a threshold of CPU/RAM
+ - HPA will scale up automatically if the average of the replicas is >= threshold
+ - 30 sec for scaleup
+ - cooling period of 5 min, scale down
+* VPA (Vertical Pod Autoscaler)
+* Cluster Autoscaler
+ - ability to add more worker nodes in the data plane
+
+$ minikube addons list
+$ minikube addons enable metrics-server
+
+
+$ kubectl top nodes
+$ kubectl top pods
+========================HPA=================
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+   name: mydeploy
+spec:
+   replicas: 1
+   selector:
+    matchLabels:
+     name: deployment
+   template:
+     metadata:
+       name: testpod8
+       labels:
+         name: deployment
+     spec:
+      containers:
+        - name: c00
+          image: httpd
+          ports:
+          - containerPort: 80
+          resources:
+            limits:
+              memory: "200Mi"
+            requests:
+              memory: "100Mi"
+
+-----------HPA------
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: myhpamem
+spec:
+  maxReplicas: 5
+  minReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: mydeploy
+  metrics:
+  - type: Resource
+    resource:
+      name: memory
+      targetAverageUtilization: 20  
+
+To test Increase the memory, by running this inside any pod
+    $ apt update
+    $ apt install -y stress
+    $ stress --vm 1 --vm-bytes 100M
+
+   HPA                vs    VPA
+   ===                         ===
+* Used for stateless       * used for statefulset
+* You need to give min     * you dont need min/max replicas
+  & max replicas
+* It creates new replicas  * It recreates existing replicas
+* It has default of
+  5 min as cooling period  * We dont need cooling period
+
+* You dont need both HPA & VPA
+* You dont need HPA/VPA for QA cluster
+* You need Cluster Autoscaler for all Kubernetes clusters i.e QA/Stage/Prod
+
+HELM
+====
+* Its a packaging manager for kubernetes
+* Package is a collection of manifest files which defines a deployment of a application
+* Helm has a templating engine (go language)
+
+helm install package
+  - default value | uat/prod values
+
+# Install latest Helm version
+$ curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
+$ helm repo list
+$ helm repo add stable https://charts.helm.sh/stable
+$ helm search repo jenkins
+$ helm show values stable/tomcat
+$ helm show readme stable/tomcat
+$ helm install testchart stable/tomcat
+$ helm install testchart stable/tomcat --version 0.4.0
+$ helm install testchart stable/tomcat --set service.type=NodePort  
+$ helm install testchart stable/tomcat -f values.yml
+$ helm get manifest testchart
+$ helm get values testchart
+$ helm list
+$ helm delete testchart
+$ helm install testchart stable/tomcat --version 0.4.0 -f  6.0values.yml
+
+replicaCount: 2
+image:
+  tomcat:
+    tag: "6.0"
+resources:
+  limits:
+    cpu: 200m
+    memory: 400Mi
+service:
+  type: NodePort
+  externalPort: 8080
+
+$ helm upgrade testchart stable/tomcat --version 0.4.3 -f  7.0values.yml
+$ helm rollback testchart 1
+$ helm history testchart
+$ helm pull --untar stable/tomcat
+
+=======
+JENKINS
+=======
+* If you have a repetitive tasks to be automated 
+ - What to do
+ - When to run
+ - Where to run
+* Execute a task with authentication & user doesnt need to know the details
+
+* Ability to run a task on a regular intervals, on demand basis and also on scenario based
+* Include various steps in the task
+* an automation instead of us - go to a server, run applications/cmds
+
+Advantages of jenkins:
+* connect & run the task automatically
+* periodically execute
+* dashboard
+* trigger a job based on a event
+* trigger on demand
+* group of machine
+
+----------------------------Setup Master-----------------------
+
+Add the repository key to the system:
+$ sudo wget -O /usr/share/keyrings/jenkins-keyring.asc https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+
+Append the Debian package repository:
+$  echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+    https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
+    /etc/apt/sources.list.d/jenkins.list > /dev/null
+
+Install JRE 17
+$ sudo apt update
+$ sudo apt install -y fontconfig openjdk-17-jre
+
+Install Jenkins Package
+$ sudo apt install -y jenkins
+
+Status of Jenkins
+$ systemctl status jenkins | systemctl start jenkins
+
+$ netstat -an | grep 8080
+
+- Type the hostnamectl command :
+$ sudo hostnamectl set-hostname jenkinsmaster
+
+-------------------------Setup Slave-------------
+$ sudo apt update
+$ sudo apt install -y openjdk-17-jdk
+
+- Type the hostnamectl command :
+$ sudo hostnamectl set-hostname jenkinsslave
+
+Jenkins Pipeline
+=============
+(series of tasks done in order on different servers)
+* Pipeline as Code - declarative
+* DSL - Groovy scripts
+  1. scripted pipeline
+  2. declarative pipeline
+* Jenkinsfile - Gitlab repository
+
+Advantages:
+- collection of multiple freestyle jobs into 1 single pipeline job
+- reuse the code
+- single job can connect to multiple servers
+- ability to call another job within a pipeline
+- flexible
+
+Syntax:
+---------
+pipeline {
+ stages {
+   stage('stage1'){
+     agent {}
+     steps {}
+   } // end of stage1
+   stage('stage2'){
+     agent {}
+     steps {}
+   } // end of stage2
+ } // end of stages
+} // end of pipeline
+
+--------------------------
+pipeline {
+    agent any
+    stages {
+       stage('Stage1') {
+            steps {
+                echo 'First Stage'
+            }
+        }
+       stage('Stage2') {
+            steps {
+                echo 'Second Stage'
+            }
+        }
+   }
+}
+-------------------------------
+pipeline {
+    agent { label 'demo' }
+    stages {
+        stage('Stage1') {
+            steps {
+                echo 'First Stage'
+            }
+        }
+        stage('Stage2') {
+            steps {
+                echo 'Second Stage'
+            }
+        }
+    }
+}
+
+-------------------------------
+pipeline {
+    agent none
+    stages {
+        stage('Stage1') {
+            agent { label 'demo' }
+            steps {
+                echo 'First Stage'
+            }
+        }
+        stage('Stage2') {
+            agent any
+            steps {
+                echo 'Second Stage'
+            }
+        }
+    }
+}
+
+-----------------------------------
+pipeline {
+    agent { label 'demo' }
+    environment {
+        MYNAME = 'Adam'
+    }
+    stages {
+        stage('Stage1') {
+            steps {
+                sh " echo 'Your name: $MYNAME' "
+            }
+        }
+        stage('Stage2') {
+            steps {
+                echo env.MYNAME
+            }
+        }
+    }
+}
+
+------------------
+pipeline {
+    agent { label 'demo' }
+    environment {
+        MYNAME = 'global'
+    }
+    stages {
+        stage('Stage1') {
+            environment {
+                MYNAME = 'local'
+            }
+            steps {
+                sh "echo 'Your name: $MYNAME'"
+            }
+        }
+        stage('Stage2') {
+            steps {
+                echo env.MYNAME
+            }
+        }
+    }
+}
+
+----------------
+pipeline {
+    agent any
+    parameters {
+        string(name: 'PERSON', defaultValue: 'Mr Adam', description: 'Who are you?')
+        text(name: 'BIOGRAPHY', defaultValue: '', description: 'Enter some information about the person')
+        booleanParam(name: 'TOGGLE', defaultValue: true, description: 'Toggle this value')
+        choice(name: 'CHOICE', choices: ['One', 'Two', 'Three'], description: 'Pick something')
+        password(name: 'PASSWORD', defaultValue: 'SECRET', description: 'Enter a password')      
+        file(name: "file.properties", description: "Choose a file to upload")
+    }
+    stages {
+        stage('Example') {
+            steps {
+                echo "Hello ${params.PERSON}"
+
+                echo "Biography: ${params.BIOGRAPHY}"
+
+                echo "Toggle: ${params.TOGGLE}"
+
+                echo "Choice: ${params.CHOICE}"
+
+                echo "Password: ${params.PASSWORD}"
+            }
+        }
+    }
+}
+---------------------
+pipeline {
+    agent { label 'demo' }
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '5'))
+    }
+    stages {
+        stage('Stage1') {
+            steps {
+                echo 'First Stage'
+            }
+        }
+   }
+}
+---------------------------
+pipeline {
+    agent { label 'demo' }
+    options {
+       retry(3)
+    }
+    stages {
+        stage('Stage1') {
+            steps {
+                sh 'exit 1'
+            }
+        }
+        stage('stage2') {
+            steps {
+               sh 'echo Stage 2'
+            }
+        }
+     }
+}
+---------------------------
+pipeline {
+    agent { label 'demo' }
+    stages {
+        stage('Stage1') {
+             options {
+               retry(3)
+             }
+            steps {
+                sh 'exit 1'
+            }
+        }
+        stage('stage2') {
+            steps {
+               sh 'echo Stage 2'
+            }
+        }
+     }
+}
+------------------
+pipeline {
+    agent { label 'demo' }
+    options {
+          timeout(time: 15, unit: 'SECONDS')
+          timestamps()
+    }
+    stages {
+        stage('Stage1') {
+            steps {
+                echo "Stage 1"
+                sh 'sleep 5'
+            }
+        }
+        stage('Stage2') {
+            steps {
+                echo "Stage 2"
+                sh 'sleep 5'
+            }
+        }
+    }
+}
+
+-------------------------------
+pipeline {
+    agent { label 'demo' }
+    stages {
+        stage('Clone Repo') {
+            steps {
+                echo 'Going to Checkout from Git'
+                git branch: 'newfeature', changelog: false, credentialsId: 'Gitlab-clone', poll: false, url: 'https://gitlab.com/wezvaprojects/buildpipeline/backend/springboot.git'
+                echo 'Completed Checkout from Git'
+            }
+        }
+    }
+}
+
+--------------------------------
+pipeline {
+    agent { label 'demo' }
+    stages {
+        stage('Stage1') {
+            steps {
+              build job: 'basics', parameters: [string(name: 'USER', value: 'WEZVATECH')]
+              echo 'Completed running child job'
+             }
+        }
+        stage('Stage2') {
+            steps {
+                echo 'Testing'
+            }
+        }
+    }
+}
+-----------------------------
+pipeline {
+    agent any
+    stages {
+        stage('Stage1') {
+          steps {
+             catchError(buildResult: 'UNSTABLE', message: 'ERROR FOUND') {
+                 sh 'exit 1'
+             }
+          }
+        }
+       stage('Stage2') {
+            steps {
+                  echo 'Running Stage2'
+            }
+        }
+    }
+}
+
+---------------------------------
+pipeline {
+    agent any
+    environment { DEPLOY_TO = 'qa'}
+    stages {
+        stage('Stage1') {
+            when {
+                  environment name: 'DEPLOY_TO', value: 'qa'
+             }
+            steps {
+                  echo 'Running Stage1 for QA'
+            }
+        }
+       stage('Stage2') {
+            when {
+                  environment name: 'DEPLOY_TO', value: 'production'
+             }
+            steps {
+                  echo 'Running Stage2 for production'
+            }
+        }
+    }
+}
+--------------------------------
+pipeline {
+    agent any
+    parameters {
+        booleanParam(name: 'TOGGLE', defaultValue: true, description: 'Toggle this value')
+    }
+    stages {
+        stage('Stage1') {
+            when {
+                  expression { return params.TOGGLE }
+            }
+            steps {
+                  echo 'Testing'
+            }
+        }
+    }
+}
+--------------------------------
+pipeline {
+    agent any
+    parameters {
+        string(name: 'PERSON', defaultValue: 'Adam', description: 'Who are you?')
+    }
+    stages {
+        stage('Stage1') {
+            when { equals expected: 'adam' , actual: params.PERSON }
+            steps {
+                  echo 'Hi Adam !!'
+            }
+        }
+    }
+}
+-------------------------------
+COND1 AND COND2
+True      True - True
+False     True - False
+True      False - False
+
+COND1 OR COND2
+True      True - True
+False     True - True
+True      False - True
+False     False - False
+
+pipeline {
+    agent any
+    parameters {
+        string(name: 'PERSON', defaultValue: 'Mr Adam', description: 'Who are you?')
+        booleanParam(name: 'TOGGLE', defaultValue: true, description: 'Toggle this value')
+    }
+    stages {
+        stage('Stage1') {
+            when {
+              allOf {
+                equals expected: 'adam' , actual: params.PERSON
+                expression { return params.TOGGLE }
+               }
+            }
+            steps {
+                  echo 'Hi Adam !!'
+            }
+        }
+    }
+}
+
+---------------------------
+pipeline {
+    agent any
+    parameters {
+        string(name: 'PERSON', defaultValue: 'Mr Adam', description: 'Who are you?')
+        booleanParam(name: 'TOGGLE', defaultValue: true, description: 'Toggle this value')
+    }
+    stages {
+        stage('Stage1') {
+            when {
+                anyOf {
+                   equals expected: 'adam' , actual: params.PERSON
+                   expression { return params.TOGGLE }
+                }
+             }
+            steps {
+                  echo 'Hi Adam !!'
+            }
+        }
+    }
+}
+
+----------------------
+pipeline {
+  agent any
+  stages{
+    stage('stage1'){
+      steps { echo "stage1"}
+    }
+    stage('stage2'){
+      steps { echo "stage1"}
+    }
+  }
+  post {
+    always{ echo "Post Stage"}
+  }
+}
+---------------------
+pipeline {
+  agent any
+  stages{
+    stage('stage1'){
+      steps { echo "stage1"}
+      post {
+         always { echo "Post Stage1" }
+      }
+    }
+    stage('stage2'){
+      steps { echo "stage2"}
+    }
+  }
+}
+
+Spring Boot Build Pipeline
+====================
+pipeline {
+  agent none
+  parameters {
+    string(name: 'ECRURL', defaultValue: '303255670930.dkr.ecr.ap-south-1.amazonaws.com', description: 'Please Enter your Docker ECR REGISTRY URL without https?')
+    string(name: 'APPREPO', defaultValue: 'wezvatechbackend', description: 'Please Enter your Docker App Repo Name:TAG?')
+    string(name: 'REGION', defaultValue: 'ap-south-1', description: 'Please Enter your AWS Region?') 
+  }
+
+stages {
+     stage('Checkout')
+    {
+      agent { label 'demo' }
+      steps {
+        git branch: 'newfeature', credentialsId: 'GitlabCred', url: 'https://gitlab.com/wezvaprojects/buildpipeline/backend/springboot.git'
+      }
+     } 
+
+   stage('Build')
+    {
+      agent { label 'demo' }
+      steps {
+            echo "Building Sprint Boot Jar ..."
+            sh "mvn clean package -Dmaven.test.skip=true"
+            sh "cp target/wezvatech-springboot-mysql-9739110917.jar target/backend_fb${BUILD_ID}.jar"
+       }
+    }
+
+   stage('Store Artifacts')
+    {
+       agent { label 'demo' }
+       steps {
+        script {
+       /* Define the Artifactory Server details */
+            def server = Artifactory.server 'wezvatechjfrog'
+            def uploadSpec = """{
+                "files": [{
+                "pattern": "target/backend_fb${BUILD_ID}.jar",
+                "target": "wezvatech_backend"
+                }]
+            }"""
+
+            /* Upload the war to Artifactory repo */
+            server.upload(uploadSpec)
+        }
+       }
+    }
+
+  stage('Build Image')
+  {
+    agent { label 'demo' }
+    steps{
+      script {
+                                  // Prepare the Tag name for the Image
+          AppTag = params.APPREPO + ":fb" + env.BUILD_ID
+                                  // Docker login needs https appended
+          ECR = "https://" + params.ECRURL
+          docker.withRegistry( ECR, 'ecr:ap-south-1:AWSCred' ) {
+                                  // Build Docker Image locally
+               myImage = docker.build(AppTag)
+                                 // Push the Image to the Registry 
+               myImage.push()
+          }
+      }
+    }
+   }
+
+  } // end of stages
+} // end of pipeline
+
+Jenkins Plugins Used
+---------------------------
+* Git plugin, JDK plugin
+* Parameterized trigger plugin
+* Ansible plugin
+* Gitlab plugin
+* Artifactory plugin
+* Docker Pipeline
+* Amazon ECR Plugin
+* Pipeline: AWS steps
+* SonarQube Scanner
+* Quality Gates
+* Prometheus metrics
+
+Install Artifactory using Docker:
+----------------------------------------
+$ mkdir -p ~/jfrog/artifactory/var/etc
+$ chmod -R 777 ~/jfrog
+$ touch ~/jfrog/artifactory/var/etc/system.yaml
+$ chown -R 1030:1030 ~/jfrog/artifactory/var
+$ docker run --name artifactory -v ~/jfrog/artifactory/var:/var/opt/jfrog/artifactory -d -p 8081:8081 -p 8082:8082 releases-docker.jfrog.io/jfrog/artifactory-oss:latest
+## -- If latest image fails for "Master key not found", use specific tag like 7.77.5 -- ##
+$ docker run --name artifactory -v ~/jfrog/artifactory/var/:/var/opt/jfrog/artifactory -d -p 8081:8081 -p 8082:8082 releases-docker.jfrog.io/jfrog/artifactory-oss:7.77.5
+
+--**NOTE: If OSS Image is not available use the below Community Edition Image ** --
+$ docker run --name artifactory -v ~/jfrog/artifactory/var/:/var/opt/jfrog/artifactory -d -p 8081:8081 -p 8082:8082 releases-docker.jfrog.io/jfrog/artifactory-cpp-ce:latest
+
+- for jfrog artifactory default cred: admin/password
+
+Setup ECR registry:
+-------------------------
+provider "aws" {
+  region = "ap-south-1"
+}
+
+# Create indivual private repository per project
+resource "aws_ecr_repository" "example" {
+  name                 = "wezvatechbackend"  # name of the repo/project
+  image_tag_mutability = "MUTABLE"
+
+  image_scanning_configuration {
+    scan_on_push = true
+    # ECR uses Clair
+  }
+}
+
+
+IAC DevSecOps Pipeline
+--------------------------------
+$ sudo apt install -y ansible
+$ ansible-playbook install_checkov.yml
+
+Prometheus
+=========
+* 3 parts of monitoring solution
+ - Collection of data (prometheus server)
+ - visualization of data (grafana)
+ - alerting/notification (alert manager)
+
+Create a user for Prometheus on your system
+$ useradd -rs /bin/false prometheus
+ 
+Create a new folder and a new configuration file for Prometheus
+$ mkdir /etc/prometheus
+$ touch /etc/prometheus/prometheus.yml
+
+Create a data folder for Prometheus
+$ mkdir -p /data/prometheus
+$ chown prometheus:prometheus /data/prometheus /etc/prometheus/*
+
+$ vi /etc/prometheus/prometheus.yml
+global:
+  scrape_interval: 5s
+  evaluation_interval: 1m
+# A scrape configuration scraping a Node Exporter and the Prometheus server itself
+scrape_configs:
+  # Scrape Prometheus itself every 10 seconds.
+  - job_name: 'prometheus'
+    scrape_interval: 10s
+    static_configs:
+      - targets: ['localhost:9090']
+
+# Get the userid for running Prometheus - TAKE THE FIRST ID FROM THE OUTPUT
+$ cat /etc/passwd | grep prometheus
+
+# Create the Prometheus container
+$ docker run --name myprom -d -p 9090:9090 --user 999:999 --net=host -v /etc/prometheus:/etc/prometheus -v /data/prometheus:/data/prometheus prom/prometheus --config.file="/etc/prometheus/prometheus.yml" --storage.tsdb.path="/data/prometheus"
+
+# Create a Grafana container (Credentials: admin/admin)
+$ docker run --name grafana -d -p 3000:3000 --net=host grafana/Grafana
+
+# Set a hostname
+$ sudo hostnamectl set-hostname promserver
+
+---------------Monitor A Node -------
+Create a user for Node Exporter
+$ useradd -rs /bin/false node_exporter
+$ cat /etc/passwd | grep node_exporter
+
+Creating Node exporter container
+$ docker run --name exporter -d -p 9100:9100 --user 997:997 -v "/:/hostfs" --net="host" prom/node-exporter --path.rootfs=/hostfs
+ 
+$ vi /etc/prometheus/prometheus.yml
+ - job_name: 'BuildMachine01'
+   static_configs:
+   - targets: ['172.31.7.207:9100']
+
+Restart Prometheus, get the PID & send SIGHUP signal
+$ ps aux | grep prometheus
+$ kill -HUP <PID>
+
+To test Increase the memory
+    $ apt update
+    $ apt install -y stress
+    $ stress --vm 1 --vm-bytes 100M
+
+* User 1860 grafana dashboard
+
+----------------------Monitor Jenkins------------
+- job_name: 'Jenkins'
+  metrics_path: /prometheus
+  static_configs:
+   - targets: ['172.31.1.127:8080']
+
+* Use "9964" Dashboard Id in Grafana
+
+---------------------Monitor Containers---------
+# Run Cadvisor container to collect container metrics
+$ docker run --name cadvisor -d -p 8080:8080 -v /:/rootfs:ro -v /var/run:/var/run:rw -v /sys:/sys:ro -v /var/lib/docker/:/var/lib/docker:ro gcr.io/cadvisor/cadvisor
+--- OLD IMAGE ---
+$ docker run --name cadvisor -d -p 8080:8080 -v /:/rootfs:ro -v /var/run:/var/run:rw -v /sys:/sys:ro -v /var/lib/docker/:/var/lib/docker:ro google/cadvisor
+
+Edit /etc/prometheus/prometheus.yml & add a job for Cadvisor:
+- job_name: 'cadvisor'
+  static_configs:
+  - targets: ['localhost:8080']
+
+* Use 893 grafana dashboard
+
+------------------Monitor SpringBoot Appliction--------
+$ curl -s http://localhost:8080/actuator/health/liveness
+$ curl -s http://localhost:8080/actuator/health/readiness
+
+# Edit /etc/prometheus/prometheus.yml & add below
+  - job_name: 'SpringBoot JVM'
+  metrics_path: '/actuator/prometheus'
+  scrape_interval: 5s
+  static_configs:
+  - targets: ['172.31.41.193:8080']
+
+* Use 12464 grafana dashboard for the SpringBoot APM
+
+Monitor K8s Cluster
+===============
+# Install latest Helm version
+$ curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
+# Install Prometheus server
+$ helm repo add prometheus-community https://prometheus-community.github.io/helm-charts 
+$ helm install prometheus prometheus-community/prometheus 
+$ kubectl expose service prometheus-server --type=NodePort --target-port=9090 --name=prometheus-server-np
+$ kubectl edit svc prometheus-server-np     # Change the NodePort to 32000
+
+# Install Grafana
+$ helm repo add grafana https://grafana.github.io/helm-charts
+$ helm install grafana grafana/grafana
+$ kubectl expose service grafana --type=NodePort --target-port=3000 --name=grafana-np
+$ kubectl edit svc grafana-np     # Change the NodePort to 31000
+$ kubectl get secret --namespace default grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+
+
+# Add datasource with the URL for our Prometheus instance is the name of the service "http://prometheus-server:80"
+# Import https://grafana.com/grafana/dashboards/6417 dashboard for Kubernetes monitoring on Grafana
+
+Centralized Log Management (server/app/access)
+======================================
+* Log management using EFK
+* Fluentd - is a log agrregrator for pods, which reads logs from pods and redirects
+* Elasticsearch - is a nosql db to store all the logs & also a search engine
+* Kibana - is a data visualization dashboard
+
+Fluentd - daemonset - ClusterIP
+Elasticsearch - Statefulset - ClusterIP
+Kibana - Deployment - NodePort
+
+$ git clone https://github.com/cdwv/efk-stack-helm
+$ cd efk-stack-helm
+
+- Edit values.yaml, set the below values for rbac & kibana service type:
+rbac:
+  enabled: true
+
+service:   # this is for kibana configuration
+    type: NodePort
+
+- Edit Chart.yaml & add below line
+version: 0.0.1
+
+- Edit templates/kibana-deployment.yaml & change the apiversion
+apiVersion: apps/v1
+
+$ helm install demoefk .
+
+# Change the NodePort to 32000
+$ kubectl edit svc demoefk-kibana
+
+kind: Pod                            
+apiVersion: v1                    
+metadata:                        
+  name: testpod                  
+spec:                                    
+  containers:                      
+    - name: c00                    
+      image: ubuntu              
+      command: ["/bin/bash", "-c", "while true; do echo Hello-Adam-`date`; sleep 5 ; done"]
+  restartPolicy: Never
+
+Clear Cache in Ubuntu:
+$ sync; echo 1 > /proc/sys/vm/drop_caches
+$ sync; echo 2 > /proc/sys/vm/drop_caches
+$ sync; echo 3 > /proc/sys/vm/drop_caches 
+
+==================
+CAPSTONE PROJECT
+==================
+
+# Use t3a.xlarge (not t2.xlarge) i.e 4 cpu & 16 GB and We need Helm 3.7+ for Vault server
+$ curl https://get.helm.sh/helm-v3.12.0-linux-amd64.tar.gz > helm.tar.gz
+$ tar xzvf helm.tar.gz
+$ mv linux-amd64/helm /usr/local/bin
+
+
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+  extraPortMappings:
+  - containerPort: 31000
+    hostPort: 31000
+    listenAddress: "0.0.0.0"
+    protocol: TCP
+  - containerPort: 32000
+    hostPort: 32000
+    listenAddress: "0.0.0.0"
+    protocol: TCP
+- role: worker
+- role: worker
+
+$ kind create cluster --name wezvatech --config=capstone-kind.yml
+
+# Ensure Hashicorp Vault server is running 
+
+Argo Rollouts
+------------------
+# Install controller:
+$ kubectl create namespace argo-rollouts
+$ kubectl apply -n argo-rollouts -f https://github.com/argoproj/argo-rollouts/releases/latest/download/install.yaml
+$ kubectl get pods -n argo-rollouts
+
+# Install plugin:
+$ curl -LO https://github.com/argoproj/argo-rollouts/releases/latest/download/kubectl-argo-rollouts-linux-amd64 && chmod +x ./kubectl-argo-rollouts-linux-amd64 &&  sudo mv ./kubectl-argo-rollouts-linux-amd64 /usr/local/bin/kubectl-argo-rollouts
+$ kubectl argo rollouts version
+
+Frontend Deployment
+------------------------------
+# Change the active service to port 32000 & preview service to 31000
+$ kubectl apply -f .
+$ kubectl argo rollouts get rollout canary-demo --watch
+$ kubectl argo rollouts promote canary-demo
+$ kubectl argo rollouts undo canary-demo
+
+
+Backend Deployment
+-----------------------------
+# Remove the node port 32000 from service
+$ kubectl apply -f .
+$ kubectl label nodes <node> servertype=large
+$ kubectl argo rollouts get rollout mongo --watch
+$ kubectl argo rollouts promote mongo
+$ kubectl argo rollouts undo mongo --to-revision=1
+
+** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** 
+** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** 
+
+===========
+Best Practices - TERRAFORM 
+===========
+1) Version control the changes - Environment based branching
+
+2) Multiple user accounts on AWS
+  - dev account for our Devops development activities
+  - ops admin account for QA environment
+  - stage & prod admin account for production environment
+
+3) Use profiles & Alias
+
+[profilename]
+accessid=
+secretid=
+region=
+
+provider "aws" {
+  region = "ap-south-1"
+  profile = var.profile_name    # Access/Secret Key rereferred from ~/.aws/credentials #
+  alias = "mumbai"
+}
+
+provider "aws" {
+  alias  = "virginia"               # Alias name for reference #
+  region = "us-east-1"
+  profile = var.profile_name 
+}
+
+resource "aws_instance" "example" {
+  ami           = "ami-0742b4e673072066f"
+  instance_type = "t2.micro"
+  provider = aws.mumbai                 # Alias name to pick the provider #
+}
+resource "aws_instance" "example1" {
+  ami           = "ami-0742b4e673072066f"
+  instance_type = "t2.micro"
+  provider = aws.virginia               # Alias name to pick the provider #
+}
+
+4) Use Specific version info & required providers - version.tf
+  terraform {
+    required_providers {
+      aws = {
+         source = "hasicorp/aws"
+         version = "~> 1.0"
+      }
+    }
+   }
+
+5) DRY principle - use variables & modules
+6) Use remote state file & state-lock
+
+7) Manage terraform logs (Log level: Info, Debug, Warn, Error, Trace)
+$ export TF_LOG=TRACE
+$ export TF_LOG_PATH=/tmp/terraformlog.txt
+
+8) DevSecops - Dynamic Secrets using Hashicorp Vault
+
+TYPES OF BLOCKS
+================
+0. version block
+1. provider block
+2. resource block
+3. data block
+4. backend block
+5. variable block
+6. output block
+7. local block
+8. module block
+9. dynamic block
+10. provisioner block
+
+CONCEPTS
+=========
+# implicit & explicit dependencies
+# import
+# loop
+# conditions
+# taint
+# null_resource
+# profile/alias
+
+META ARGUMENTS
+================
+# depends_on: used to specify the explicit dependency between 2 resources
+# count: loops a resource block as a list of value
+# for_each: loops a resource block as a map 
+# provider: specifically pick a provider block
+
+SYNTAX
+=======
+   provider "providername" {
+     key = value
+   }
+
+   resource "provider_resourcetype" "name" {
+      key = value
+   }
+
+   data "provider_datatype" "name" {
+     key = value
+   }
+
+   backend "type" {
+     remotestatelocation = value
+     statelocklocation = value
+   }
+
+   variable "name" {
+     type = list/map
+     default = value
+   }
+
+   output "name" {
+      value = resource/data.type.name.attribute
+   }
+  
+   local "name" {
+       variablename = value
+   }
+
+   module "name" {
+      source = "location"
+      variable = value
+   }
+  
+   provisioner "type" {
+      command = value
+   }
+
+===========   
+Best Practices - [ DOCKERFILE ]
+===========   
+1) Version control the changes - Environment based branching (Dev branch , Prod/Main branch)
+2) Choose base images without the full OS
+3) Limit the amount of layers in image 
+4) Run as non-root user
+5) Use specific tag name for image
+6) Use Dockerignore file
+7) Use multi-stage builds
+8) Do not put layers which are specific to environments i.e application configuration files, certificates
+
+Standard layer for App Image:
+----------------------------------------
+1. OS Layer
+2. Framework/dependency Layer
+3. Application Layer
+4. Scripts(healthcheck/startup)
+5. Configuration layer (properties files/certificates)
+
+# To create a Image, we need to know:
+   --------------------------------------------------
+- what base image to take
+- what startup cmd/script to run
+- from which folder to run
+- as what user to run
+- what files to be copied
+- what environment variables are needed
+- what ports should be exposed
+
+Smoke test: 
+$ docker run --rm --net=host --name test -d -p 8080:8080 <image:tag>
+
+SYNTAX
+=======
+FROM          <BaseImage>        # image for creating the intermediate container
+RUN             <command>            # instruction to run OS cmd inside the intermediate container
+CMD                  ["executable","arg1","arg2"]    # user cmd will override the default cmd
+ENTRYPOINT   ["executable","arg1","arg2"]    # always runs default cmd, user cmd is taken as arguments
+COPY         <SRC> <DEST>                    # copies file from docker host to image
+ADD          <SRC> <DEST>                    # extract a archive or download a file from a URL
+USER         <USERNAME>                      # sets the default user
+WORKDIR      <PATH>                          # sets the default workig dir
+ENV          <VARNAME>=<VALUE>               # variable visible in the image
+ARG          <VARNAME>=<VALUE>               # variable only visible in temp container, not on image
+EXPOSE       <PORT#>
+
+
+DevOps Projects - IAC/Terraform
+===============
+* Developed module for network to support public(frontend) & private(backend) infra
+ - Gather requirements
+ - plan & design
+ - code & test/review
+* Developed modules for Auto-scaling, load balancers(ELB) to support high availability
+* Developed module for EC2 provisioning 
+* Developed module for EKS
+
+Operations:
+- Ran the terraform module against dev env & provisioned dev infra 
+
+DevOps Experience:
+- 6 weeks
+
+Exercise
+=======
+1. Develop a module to create a S3 bucket
+    - enable versioning as an option
+    - apply a lifecycle policy to change the class type of the object after 30 days as an option
+
+2. Develop a module to create a user (IAM) 
+    - create a policy as an option
+
+ERRORS
+=======
+# failed to create shim task: OCI runtime create failed: runc create failed: unable to start container process: exec: "-xmx2gb": executable file not found in $PATH: unknown.
+# Application crashloop error
+# Could not connect to the endpoint URL https://api.ecr.null.amazonaws.com
+# Forbidden access API server for a user account - Code 403
+{
+  "kind": "Status",
+  "apiVersion": "v1",
+  "metadata": {},
+  "status": "Failure",
+  "message": "forbidden: User \"system:serviceaccount:default:demosa\" cannot get path \"/\"",
+  "reason": "Forbidden",
+  "details": {},
+  "code": 403
+}
+# Failed to pull image "mongo": rpc error: code = Unknown desc = failed to pull and unpack image "docker.io/library/mongo:latest": failed to extract layer sha256:1b9b7346fee7abbc7f5538eaa23548bd05a45abe8daf6794024be0c8ad7d60bb: mount callback failed on /var/lib/containerd/tmpmounts/containerd-mount3046448837: write /var/lib/containerd/tmpmounts/containerd-mount3046448837/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30: no space left on device: unknown
+
+===============
+DevOps Projects - Containerization/Dockerfile
+===============
+* Containerization of a Backend Java springboot microservices - generating Application Image
+* Containerization of a frontend React js microservices - generating Application Image
+
+Operations:
+- Verify the Dockerfile & testing the image, vulnerabilities  
+
+DevOps Experience:
+- 3 weeks
+
+===============   
+DevOps Projects [ Pipeline/Jenkins/DevSecOps ]
+=============== 
+* Developed Jenkinsfile (Pipeline as Code) for Backend Java springboot microservices Build Pipeline 
+* Developed Jenkinsfile (Pipeline as Code) for frontend React js microservices Build Pipeline 
+* Setup Deployment pipelines for Java/Node microservices to support Release activities cross different environments QA/Stage/Production
+* Enabled DevSecops pipelines for Infra provisioning for catching the IAC misconfigurations and to handle approvals automatically
+* Setup DevSecops based CICD pipeline for SCA, SAST, DAST, Vulnerabilities
+
+Operations:
+- Setup Jenkins build job for feature branch, integration branch, release branch and Jenkins deployment pipeline job for dev/qa/stage & prod env
+
+DevOps Experience:
+- 4 weeks
+
+===============
+DevOps Projects - Kubernetes
+===============
+* Developed Manifest files to deploy Backend Java springboot microservices in k8s - yml files
+* Developed Manifest files to deploy frontend React js microservices in k8s - yml files
+* Creating/Upgrading Kubernetes clusters using EKS
+* Enabled Gitops based deployments on Kubernetes - ArgoCD, Argo Rollouts
+
+Operations:
+- Verify the code & setup Argocd application for qa, stage & prod env 
+
+DevOps Experience:
+- 4 weeks
+
+===============   
+DevOps Projects [ Montioring ]
+===============
+* Enabled Continuous Monitoring solution i.e collect, visualize, alerts using Prometheus, Grafana
+* Enabled Centralized Log management for all applications running in QA & Prod using EFK
+
+Operations:
+- Configure EFK & Promethes/Grafana for  qa, stage & prod env 
+
+DevOps Experience:
+- 2 weeks
+
+
+Exercise
+=======
+1. Develop a module to create a S3 bucket
+    - enable versioning as an option
+    - apply a lifecycle policy to change the class type of the object after 30 days as an option
+
+2. Develop a module to create a user (IAM) 
+    - create a policy as an option
+    
+ERRORS
+=======
+# failed to create shim task: OCI runtime create failed: runc create failed: unable to start container process: exec: "-xmx2gb": executable file not found in $PATH: unknown.
+# Application crashloop error
+
+Roles & Responsibilities
+===================
+* Support Continuous Development for projects - Manage Gitlab, namespaces, groups, projects, branching strategies, developer workflow
+* Automate Infrastructure provisioning using IAC - Terraform
+* Automate Configuration Management of different servers like Dev, QA, Build, Stage or Production using Ansible
+* Automate Formal Builds like Continuous Integration, Full/Nightly Build, Release, Integration pipelines
+* Automate Continuous Delivery & Deployment pipelines
+* Containerization of Microservices - Develop App Image
+* Automated Kubernetes Deployments using Gitops & Helm
+* Support Centralized Log management - EFK
+* Continuous Monitoring of Build server, Deployment server, Kubernetes Cluster, Application, Services - setup a monitoring solution
+* Ensure the security of the DevOps process & pipeline
+* Cloudops - EKS
+
+Day-Day Tasks
+============
+* Standup Meeting (Scrum/Kanban), Release Planning, CAB meeting
+* Customer tickets or Dev/QA tickets or Internal project Jira Tickets/MS Teams/Slack/ServiceNow
+* Monitor all the services, servers, applications on UAT/Prod environments
+* Monitor all the build, deployment, other pipelines are running fine
+* Manage Gitlab groups, Manage gitlab projects, manage branches, approval, merges, webhook
+* Develop Terraform configuration files, modules to support provisioning Dev/QA/stage/prod environments
+* Develop Ansible Playbook/Roles for automating configuration of servers 
+* Develop Jenkins Pipeline for automating various builds like CI, Nightly, BaseImage, Continious Delivery and IAC pipelines, Configuration Management Pipelines
+* Setup, Configure & Maintain Jenkins Master, Jenkins Slaves, plugin management, backup, permissions
+* Maintain Jenkins jobs for various build pipeline automation & IAC/CM
+* Develop Dockerfile for AppImage (Jar/War, start/stop scripts, healthcheck scripts, monitoring agent)
+* Setup Gitops operator using ArgoCD for Dev/QA/UAT/Prod environments
+* Develop Kubernetes Manifest for Application deployment, log management
+* Develop Helm packages for Microservice deployment, DevOps applications
+* Develop Monitoring solution and Alerting rules for notifiation using Prometheus, Grafana
+   - configure exporters, configure targets to scarpe frequently, setup rules, setup dashboards
+* Implement DevSecOps at every level of DevOps 
+* Collaborate with stakeholders
+
+Maintenance usecase:
+ - any updates to the qa/production/stage servers
+ - any changes/updates to the qa/production/stage infra
+ - any changes/updates to the qa/production/stage application or deployments
+ - any changes/updates to 3rd party application in the qa/production/stage infra
+ - any changes/updates to EKS clusters in QA/STAGE/PRODUCTION
+
+Change Approval Board (CAB): Change Request
+# when the maintenance window is going to be performed  (Date/time)
+# what exactly the maintenance is about
+# Severity
+# Imapct to the customers
+# Rollback Mechanism
+- Send notification about starting/ending of maintenance
+
+More Projects on our Youtube Channel:
+==============================
+- K8s deployment strategy
+- K8s debugging 
+- Golden Images using packer/terrform
+- Docker Image optimization
+- Managing Dynamic secrets using Hashicorp Vault for Infra provisioning
+
+* IAC - Terraform
+* CAC - Ansible
+* DVCS - Gitlab, Git
+* Pipeline - Jenkins
+* Containerization - Docker
+* Orchestration of Containers - Kubernetes
+* Continuous Monitoring - Prometheus, Grafana, EFK
+* Continuous Delivery (Gitops) - ArgoCD, Argo Rollout
+* DevSecops - Checkov, Hashicorp vault, haldo, clair, Sonarqube
+* Cloud - AWS
